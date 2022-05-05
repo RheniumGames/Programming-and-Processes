@@ -1,5 +1,5 @@
-# A revision tool that can use user input questions and answers and present
-# them in an easy to use and effective way.
+# A revision tool that can use user created questions and answers and present
+# them in a quiz format.
 
 import tkinter
 
