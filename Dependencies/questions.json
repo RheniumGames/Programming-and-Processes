@@ -1,0 +1,14 @@
+{
+    "QuestionList": [
+        {
+            "question": "What is the capital of Spain?",
+            "options": ["Madrid", "Barcelona", "Seville", "Valencia"],
+            "answer": "Madrid"
+        },
+        {
+            "question": "What is the capital of Sweden?",
+            "options": ["Stockholm", "Oslo", "Gothenburg", "Helsinki"],
+            "answer": "Stockholm"
+        }
+    ]
+}
