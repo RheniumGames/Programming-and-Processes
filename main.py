@@ -30,17 +30,6 @@ for item in data["QuestionList"]:
         answers.append(item['answer'])
 
 
-class InvalidList(Exception):
-    pass
-
-
-def import_list():
-    try:
-        raise InvalidList("This is filler text")
-    except InvalidList as error:
-        print(error)
-
-
 def main():
     row_number = 1
     window = tk.Tk()
@@ -89,7 +78,7 @@ def main():
         except IndexError:
             pass
     
-
+    
     score_display = tk.Label(
         window,
         text=f"Score: {str(score)}",
