@@ -6,7 +6,6 @@ import os
 import random
 import time
 import tkinter as tk
-import typing as t
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 questions = []
@@ -81,7 +80,7 @@ def main():
         except IndexError:
             pass
 
-    def dark_mode(bypass: t.Optional[bool] = False):
+    def dark_mode(bypass = False):
         if (dark_mode_button.config("text")[-1] == "Dark"
                 and bypass is not True):
             dark_mode_button.config(text="Light")
@@ -255,8 +254,9 @@ def main():
         question_maker_window.configure(background="#1c1c1c")
         question_maker_window.geometry("1280x720")
         question_maker_window.columnconfigure([0, 1], weight=1)
-        question_maker_window.rowconfigure([1, 3, 5], weight=1)
+        question_maker_window.rowconfigure([1, 3, 6], weight=1)
         question_maker_window.resizable(False, False)
+        question_maker_window.focus_force()
         question_maker_window.attributes("-topmost", True)
         user_question_header = tk.Label(
             question_maker_window, text="Enter your question:",
@@ -274,6 +274,11 @@ def main():
         user_answer_1_header.grid(row=2, column=0, sticky="ew", padx=2, pady=2)
         user_answer1 = tk.Entry(question_maker_window, justify="center")
         user_answer1.grid(row=3, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer_1_correctmarker = tk.Checkbutton(
+            question_maker_window, text="Set Answer",
+            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        )
+        user_answer_1_correctmarker.grid(row=4, column=0, sticky="sew", padx=2, pady=2)
         user_answer_2_header = tk.Label(
             question_maker_window, text="Enter the second choice",
             background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
@@ -282,22 +287,42 @@ def main():
         user_answer_2_header.grid(row=2, column=1, sticky="ew", padx=2, pady=2)
         user_answer2 = tk.Entry(question_maker_window, justify="center")
         user_answer2.grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
+        user_answer_2_correctmarker = tk.Checkbutton(
+            question_maker_window, text="Set Answer",
+            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        )
+        user_answer_2_correctmarker.grid(row=4, column=1, sticky="sew", padx=2, pady=2)
         user_answer_3_header = tk.Label(
             question_maker_window, text="Enter the third choice",
             background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
             height=1
         )
-        user_answer_3_header.grid(row=4, column=0, sticky="ew", padx=2, pady=2)
+        user_answer_3_header.grid(row=5, column=0, sticky="ew", padx=2, pady=2)
         user_answer3 = tk.Entry(question_maker_window, justify="center")
-        user_answer3.grid(row=5, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer3.grid(row=6, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer_3_correctmarker = tk.Radiobutton(
+            question_maker_window, text="Set Answer",
+            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        )
+        user_answer_3_correctmarker.grid(row=7, column=0, sticky="sew", padx=2, pady=2)
         user_answer_4_header = tk.Label(
             question_maker_window, text="Enter the fourth choice",
             background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
             height=1
         )
-        user_answer_4_header.grid(row=4, column=1, sticky="ew", padx=2, pady=2)
+        user_answer_4_header.grid(row=5, column=1, sticky="ew", padx=2, pady=2)
         user_answer4 = tk.Entry(question_maker_window, justify="center")
-        user_answer4.grid(row=5, column=1, sticky="nsew", padx=5, pady=5)
+        user_answer4.grid(row=6, column=1, sticky="nsew", padx=5, pady=5)
+        user_answer_4_header = tk.Label(
+            question_maker_window, text="Enter the fourth choice",
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
+            height=1
+        )
+        user_answer_4_correctmarker = tk.Radiobutton(
+            question_maker_window, text="Set Answer",
+            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        )
+        user_answer_4_correctmarker.grid(row=7, column=1, sticky="sew", padx=2, pady=2)
 
     score_display = tk.Label(
         window,
