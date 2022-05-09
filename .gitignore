@@ -130,3 +130,6 @@ dmypy.json
 
 # vscode settings
 .vscode/
+
+# user settings
+Dependencies/user_settings.json

@@ -250,32 +250,55 @@ def main():
     def question_maker():
         # This function will bring up a GUI that will allow users to make
         # Their own questions.
-        global question_maker_window
         question_maker_window = tk.Tk()
         question_maker_window.title("Question Maker")
         question_maker_window.configure(background="#1c1c1c")
-        question_maker_window.geometry("720x480")
-        window.columnconfigure([0, 1], weight=1, uniform="group1")
-        window.rowconfigure([1, 2, 3], weight=1)
+        question_maker_window.geometry("1280x720")
+        question_maker_window.columnconfigure([0, 1], weight=1)
+        question_maker_window.rowconfigure([1, 3, 5], weight=1)
         question_maker_window.resizable(False, False)
         question_maker_window.attributes("-topmost", True)
         user_question_header = tk.Label(
             question_maker_window, text="Enter your question:",
-            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 20),
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 16),
             height=2
         )
-        user_question_header.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
-        user_question = tk.Entry(question_maker_window)
-        user_question.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
+        user_question_header.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        user_question = tk.Entry(question_maker_window, justify="center", font=("Helvetica", 16))
+        user_question.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        user_answer_1_header = tk.Label(
+            question_maker_window, text="Enter the first choice",
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
+            height=1
+        )
+        user_answer_1_header.grid(row=2, column=0, sticky="ew", padx=2, pady=2)
         user_answer1 = tk.Entry(question_maker_window, justify="center")
-        user_answer1.grid(row=2, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer1.grid(row=3, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer_2_header = tk.Label(
+            question_maker_window, text="Enter the second choice",
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
+            height=1
+        )
+        user_answer_2_header.grid(row=2, column=1, sticky="ew", padx=2, pady=2)
         user_answer2 = tk.Entry(question_maker_window, justify="center")
-        user_answer2.grid(row=2, column=1, sticky="nsew", padx=5, pady=5)
+        user_answer2.grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
+        user_answer_3_header = tk.Label(
+            question_maker_window, text="Enter the third choice",
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
+            height=1
+        )
+        user_answer_3_header.grid(row=4, column=0, sticky="ew", padx=2, pady=2)
         user_answer3 = tk.Entry(question_maker_window, justify="center")
-        user_answer3.grid(row=3, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer3.grid(row=5, column=0, sticky="nsew", padx=5, pady=5)
+        user_answer_4_header = tk.Label(
+            question_maker_window, text="Enter the fourth choice",
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
+            height=1
+        )
+        user_answer_4_header.grid(row=4, column=1, sticky="ew", padx=2, pady=2)
         user_answer4 = tk.Entry(question_maker_window, justify="center")
-        user_answer4.grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
-    
+        user_answer4.grid(row=5, column=1, sticky="nsew", padx=5, pady=5)
+
     score_display = tk.Label(
         window,
         text=f"Score: {str(score)}",
