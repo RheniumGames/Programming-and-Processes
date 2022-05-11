@@ -6,6 +6,7 @@ import os
 import random
 import time
 import tkinter as tk
+from tkinter import ttk
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 questions = []
@@ -80,7 +81,7 @@ def main():
         except IndexError:
             pass
 
-    def dark_mode(bypass = False):
+    def dark_mode(bypass=False):
         if (dark_mode_button.config("text")[-1] == "Dark"
                 and bypass is not True):
             dark_mode_button.config(text="Light")
@@ -246,6 +247,33 @@ def main():
                 json.dump(user_settings, file, indent=4)
                 file.close()
 
+    def dump_questions(question, answer, choices):
+        # Dumps the questions into the questions.json file
+        print(question)
+        print(answer)
+        print(choices)
+        correct_list = []
+        correct_list_words = []
+        print()
+        # Extract 'selected' from tuple, and set empty tuples to 0
+        for i in answer:
+            print("----")
+            try:
+                if "selected" in i:
+                    correct_list.append("1")
+                else:
+                    correct_list.append("0")
+            except IndexError:
+                correct_list.append("0")
+
+        # Loop through correct list, if there is a 1 in the list,
+        # add the corresponding text in answers to correct_list_words
+        print(correct_list)
+        for i in range(len(correct_list)):
+            if correct_list[i] == "1":
+                correct_list_words.append(choices[i])
+        print(correct_list_words)
+
     def question_maker():
         # This function will bring up a GUI that will allow users to make
         # Their own questions.
@@ -274,9 +302,8 @@ def main():
         user_answer_1_header.grid(row=2, column=0, sticky="ew", padx=2, pady=2)
         user_answer1 = tk.Entry(question_maker_window, justify="center")
         user_answer1.grid(row=3, column=0, sticky="nsew", padx=5, pady=5)
-        user_answer_1_correctmarker = tk.Checkbutton(
-            question_maker_window, text="Set Answer",
-            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        user_answer_1_correctmarker = ttk.Checkbutton(
+            question_maker_window, text="Set Answer"
         )
         user_answer_1_correctmarker.grid(row=4, column=0, sticky="sew", padx=2, pady=2)
         user_answer_2_header = tk.Label(
@@ -287,9 +314,8 @@ def main():
         user_answer_2_header.grid(row=2, column=1, sticky="ew", padx=2, pady=2)
         user_answer2 = tk.Entry(question_maker_window, justify="center")
         user_answer2.grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
-        user_answer_2_correctmarker = tk.Checkbutton(
-            question_maker_window, text="Set Answer",
-            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        user_answer_2_correctmarker = ttk.Checkbutton(
+            question_maker_window, text="Set Answer"
         )
         user_answer_2_correctmarker.grid(row=4, column=1, sticky="sew", padx=2, pady=2)
         user_answer_3_header = tk.Label(
@@ -300,9 +326,8 @@ def main():
         user_answer_3_header.grid(row=5, column=0, sticky="ew", padx=2, pady=2)
         user_answer3 = tk.Entry(question_maker_window, justify="center")
         user_answer3.grid(row=6, column=0, sticky="nsew", padx=5, pady=5)
-        user_answer_3_correctmarker = tk.Radiobutton(
-            question_maker_window, text="Set Answer",
-            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        user_answer_3_correctmarker = ttk.Checkbutton(
+            question_maker_window, text="Set Answer"
         )
         user_answer_3_correctmarker.grid(row=7, column=0, sticky="sew", padx=2, pady=2)
         user_answer_4_header = tk.Label(
@@ -318,11 +343,36 @@ def main():
             background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 12),
             height=1
         )
-        user_answer_4_correctmarker = tk.Radiobutton(
-            question_maker_window, text="Set Answer",
-            background="#1c1c1c", foreground="#ffffff", selectcolor="#1c1c1c",
+        user_answer_4_correctmarker = ttk.Checkbutton(
+            question_maker_window, text="Set Answer"
         )
+        user_answer_1_correctmarker.state(["!alternate"])
+        user_answer_2_correctmarker.state(["!alternate"])
+        user_answer_3_correctmarker.state(["!alternate"])
+        user_answer_4_correctmarker.state(["!alternate"])
         user_answer_4_correctmarker.grid(row=7, column=1, sticky="sew", padx=2, pady=2)
+        # Collect whether check buttons are checked or not
+        user_question_submit = tk.Button(
+            question_maker_window, text="Submit",
+            background="#1c1c1c", foreground="#ffffff", font=("Helvetica", 16),
+            command=lambda: dump_questions(
+                user_question.get(),
+                [
+                    user_answer_1_correctmarker.state(),
+                    user_answer_2_correctmarker.state(),
+                    user_answer_3_correctmarker.state(),
+                    user_answer_4_correctmarker.state()
+                ],
+                [
+                    user_answer1.get(),
+                    user_answer2.get(),
+                    user_answer3.get(),
+                    user_answer4.get()
+                ]
+            )
+        )
+        user_question_submit.grid(row=8, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        question_maker_window.mainloop()
 
     score_display = tk.Label(
         window,
