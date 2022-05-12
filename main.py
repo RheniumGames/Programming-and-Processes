@@ -31,7 +31,6 @@ def main():
     style = ttk.Style()
     style.theme_create("dark")
 
-
     def change_theme(theme, bypass=False):
         global default_background
         global default_text_colour
@@ -41,22 +40,65 @@ def main():
             global default_text_colour
             window.configure(background="#1c1c1c")
             style.theme_use("dark")
-            style.configure("TButton", foreground="white", background="#1c1c1c", font="Helvetica 12", padding="5 5 5 5")
-            style.configure("Header.TButton", foreground="white", background="#1c1c1c", font="Helvetica 20", padding="5 5 5 5", anchor="center")
-            style.configure("TLabel", foreground="white", background="#1c1c1c", font="Helvetica 12", anchor="center")
-            style.configure("SubHeading.TLabel", foreground="white", background="#1c1c1c", font="Helvetica 16", anchor="center")
-            style.configure("Header.TLabel", foreground="white", background="#1c1c1c", font="Helvetica 20", anchor="center")
-            style.configure("Title.TLabel", foreground="white", background="#1c1c1c", font="Helvetica 30", anchor="center")
-            style.configure("TFrame", foreground="white", background="#1c1c1c")
-            style.configure("TScrollbar", foreground="white", background="#1c1c1c")
-            style.configure("TProgressbar", foreground="white", background="#1c1c1c")
-            style.configure("TCheckbutton", foreground="white", background="#1c1c1c", font="Helvetica 12")
-            style.configure("TEntry", foreground="black", anchor="center", justify="center")
-            style.configure("Question.TEntry", font="Helvetica 30", justify="center")
-            style.configure("Answer.TEntry", font="Helvetica 20", justify="center")
-            style.configure("Checkbutton.TCheckbutton", font="Helvetica 12", justify="center", anchor="center", background="#1c1c1c", foreground="white")
-            style.configure("Header.TListbox", foreground="white", background="#1c1c1c", font="Helvetica 20", padding="5 5 5 5")
-            style.configure("Vertical.Header.TScrollbar", foreground="white", background="#1c1c1c", font="Helvetica 12", padding="5 0 5 0")
+            style.configure(
+                "TButton", foreground="white", background="#1c1c1c",
+                font="Helvetica 12", padding="5 5 5 5"
+                )
+            style.configure(
+                "Header.TButton", foreground="white", background="#1c1c1c",
+                font="Helvetica 20", padding="5 5 5 5", anchor="center"
+                )
+            style.configure(
+                "TLabel", foreground="white", background="#1c1c1c",
+                font="Helvetica 12", anchor="center"
+                )
+            style.configure(
+                "SubHeading.TLabel", foreground="white", background="#1c1c1c",
+                font="Helvetica 16", anchor="center"
+                )
+            style.configure(
+                "Header.TLabel", foreground="white", background="#1c1c1c",
+                font="Helvetica 20", anchor="center"
+                )
+            style.configure(
+                "Title.TLabel", foreground="white", background="#1c1c1c",
+                font="Helvetica 30", anchor="center"
+                )
+            style.configure(
+                "TFrame", foreground="white", background="#1c1c1c"
+                )
+            style.configure(
+                "TScrollbar", foreground="white", background="#1c1c1c"
+                )
+            style.configure(
+                "TProgressbar", foreground="white", background="#1c1c1c"
+                )
+            style.configure(
+                "TCheckbutton", foreground="white", background="#1c1c1c",
+                font="Helvetica 12"
+                )
+            style.configure(
+                "TEntry", foreground="black", anchor="center", justify="center"
+                )
+            style.configure(
+                "Question.TEntry", font="Helvetica 30", justify="center"
+                )
+            style.configure(
+                "Answer.TEntry", font="Helvetica 20", justify="center"
+                )
+            style.configure(
+                "Checkbutton.TCheckbutton", font="Helvetica 12",
+                justify="center", anchor="center", background="#1c1c1c",
+                foreground="white"
+                )
+            style.configure(
+                "Header.TListbox", foreground="white", background="#1c1c1c",
+                font="Helvetica 20", padding="5 5 5 5"
+                )
+            style.configure(
+                "Vertical.Header.TScrollbar", foreground="white",
+                background="#1c1c1c", font="Helvetica 12", padding="5 0 5 0"
+                )
             default_background = "#1c1c1c"
             default_text_colour = "white"
             user_settings["Settings"][0]["colourScheme"] = "dark"
@@ -71,22 +113,64 @@ def main():
             global default_text_colour
             window.configure(background="#F0F0F0")
             style.theme_use("default")
-            style.configure("TButton", foreground="black", background="#F0F0F0", font="Helvetica 12", padding="5 5 5 5")
-            style.configure("Header.TButton", foreground="black", background="#F0F0F0", font="Helvetica 20", padding="5 5 5 5")
-            style.configure("TLabel", foreground="black", background="#F0F0F0", font="Helvetica 12", anchor="center")
-            style.configure("SubHeading.TLabel", foreground="black", background="#F0F0F0", font="Helvetica 16", anchor="center")
-            style.configure("Header.TLabel", foreground="black", background="#F0F0F0", font="Helvetica 20", anchor="center")
-            style.configure("Title.TLabel", foreground="black", background="#F0F0F0", font="Helvetica 30", anchor="center")
-            style.configure("TFrame", foreground="black", background="#F0F0F0")
-            style.configure("TScrollbar", foreground="black", background="#F0F0F0")
-            style.configure("TProgressbar", foreground="black", background="#F0F0F0")
-            style.configure("TCheckbutton", foreground="black", background="#F0F0F0", font="Helvetica 12")
-            style.configure("TEntry", foreground="black", anchor="center", justify="center")
-            style.configure("Question.TEntry", font="Helvetica 30", justify="center")
-            style.configure("Answer.TEntry", font="Helvetica 20", justify="center")
-            style.configure("Checkbutton.TCheckbutton", foreground="black", background="#F0F0F0", font="Helvetica 12")
-            style.configure("Header.TListbox", foreground="black", background="#F0F0F0", font="Helvetica 20", padding="5 5 5 5")
-            style.configure("Vertical.Header.TScrollbar", foreground="black", background="#F0F0F0", font="Helvetica 12", padding="5 5 5 5")
+            style.configure(
+                "TButton", foreground="black", background="#F0F0F0",
+                font="Helvetica 12", padding="5 5 5 5"
+                )
+            style.configure(
+                "Header.TButton", foreground="black", background="#F0F0F0",
+                font="Helvetica 20", padding="5 5 5 5"
+                )
+            style.configure(
+                "TLabel", foreground="black", background="#F0F0F0",
+                font="Helvetica 12", anchor="center"
+                )
+            style.configure(
+                "SubHeading.TLabel", foreground="black", background="#F0F0F0",
+                font="Helvetica 16", anchor="center"
+                )
+            style.configure(
+                "Header.TLabel", foreground="black", background="#F0F0F0",
+                font="Helvetica 20", anchor="center"
+                )
+            style.configure(
+                "Title.TLabel", foreground="black", background="#F0F0F0",
+                font="Helvetica 30", anchor="center"
+                )
+            style.configure(
+                "TFrame", foreground="black", background="#F0F0F0"
+                )
+            style.configure(
+                "TScrollbar", foreground="black", background="#F0F0F0"
+                )
+            style.configure(
+                "TProgressbar", foreground="black", background="#F0F0F0"
+                )
+            style.configure(
+                "TCheckbutton", foreground="black", background="#F0F0F0",
+                font="Helvetica 12"
+                )
+            style.configure(
+                "TEntry", foreground="black", anchor="center", justify="center"
+                )
+            style.configure(
+                "Question.TEntry", font="Helvetica 30", justify="center"
+                )
+            style.configure(
+                "Answer.TEntry", font="Helvetica 20", justify="center"
+                )
+            style.configure(
+                "Checkbutton.TCheckbutton", foreground="black",
+                background="#F0F0F0", font="Helvetica 12"
+                )
+            style.configure(
+                "Header.TListbox", foreground="black", background="#F0F0F0",
+                font="Helvetica 20", padding="5 5 5 5"
+                )
+            style.configure(
+                "Vertical.Header.TScrollbar", foreground="black",
+                background="#F0F0F0", font="Helvetica 12", padding="5 5 5 5"
+                )
             default_background = "#F0F0F0"
             default_text_colour = "black"
             user_settings["Settings"][0]["colourScheme"] = "light"
@@ -96,15 +180,15 @@ def main():
                 json.dump(user_settings, file, indent=4)
                 file.close()
 
-        if theme=="#1c1c1c" and bypass is not True:
+        if theme == "#1c1c1c" and bypass is not True:
             lightmode()
 
-        elif theme=="#F0F0F0" and bypass is not True:
+        elif theme == "#F0F0F0" and bypass is not True:
             darkmode()
 
         elif user_settings["Settings"][0]["colourScheme"] == "dark":
             darkmode()
-            
+
         elif user_settings["Settings"][0]["colourScheme"] == "light":
             lightmode()
 
@@ -148,15 +232,19 @@ def main():
         )
         title.grid(row=0, column=0, columnspan=2)
         start_button = ttk.Button(
-            window, text="Start", command=lambda: list_chooser(), style="Header.TButton"
+            window, text="Start", command=lambda: list_chooser(),
+            style="Header.TButton"
         )
         start_button.grid(row=1, column=0, sticky="n")
         question_maker_button = ttk.Button(
-            window, text="Question Maker", command=lambda: question_maker(), style="Header.TButton"
+            window, text="Question Maker", command=lambda: question_maker(),
+            style="Header.TButton"
         )
         question_maker_button.grid(row=1, column=0)
         theme_change_button = ttk.Button(
-            window, text="Change Theme", command=lambda: change_theme(window.cget("bg"), False), style="Header.TButton"
+            window, text="Change Theme",
+            command=lambda: change_theme(window.cget("bg"), False),
+            style="Header.TButton"
         )
         theme_change_button.grid(row=2, column=0)
         window.bind("<Escape>", lambda event: window.destroy())
@@ -172,9 +260,12 @@ def main():
         user_question_header = ttk.Label(
             window, text="Enter your question here:", style="Header.TLabel"
             )
-        user_question_header.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        user_question_header.grid(
+            row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
+            )
         back = ttk.Button(
-            window, text="Back", command=lambda: main_menu(), style="Header.TButton"
+            window, text="Back", command=lambda: main_menu(),
+            style="Header.TButton"
             )
         back.grid(
             row=0,
@@ -184,7 +275,9 @@ def main():
         user_question = ttk.Entry(
             window, style="Question.TEntry"
         )
-        user_question.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        user_question.grid(
+            row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
+            )
         user_answer_1_header = ttk.Label(
             window, text="Enter the first choice:", style="SubHeading.TLabel"
         )
@@ -194,7 +287,9 @@ def main():
         user_answer_1_correctmarker = ttk.Checkbutton(
             window, text="Set Answer", style="Checkbutton.TCheckbutton"
         )
-        user_answer_1_correctmarker.grid(row=4, column=0, sticky="sew", padx=2, pady=2)
+        user_answer_1_correctmarker.grid(
+            row=4, column=0, sticky="sew", padx=2, pady=2
+            )
         user_answer_2_header = ttk.Label(
             window, text="Enter the second choice:", style="SubHeading.TLabel"
         )
@@ -204,7 +299,9 @@ def main():
         user_answer_2_correctmarker = ttk.Checkbutton(
             window, text="Set Answer", style="Checkbutton.TCheckbutton"
         )
-        user_answer_2_correctmarker.grid(row=4, column=1, sticky="sew", padx=2, pady=2)
+        user_answer_2_correctmarker.grid(
+            row=4, column=1, sticky="sew", padx=2, pady=2
+            )
         user_answer_3_header = ttk.Label(
             window, text="Enter the third choice", style="SubHeading.TLabel"
         )
@@ -214,7 +311,9 @@ def main():
         user_answer_3_correctmarker = ttk.Checkbutton(
             window, text="Set Answer", style="Checkbutton.TCheckbutton"
         )
-        user_answer_3_correctmarker.grid(row=7, column=0, sticky="sew", padx=2, pady=2)
+        user_answer_3_correctmarker.grid(
+            row=7, column=0, sticky="sew", padx=2, pady=2
+            )
         user_answer_4_header = ttk.Label(
             window, text="Enter the fourth choice", style="SubHeading.TLabel"
         )
@@ -228,7 +327,9 @@ def main():
         user_answer_2_correctmarker.state(["!alternate"])
         user_answer_3_correctmarker.state(["!alternate"])
         user_answer_4_correctmarker.state(["!alternate"])
-        user_answer_4_correctmarker.grid(row=7, column=1, sticky="sew", padx=2, pady=2)
+        user_answer_4_correctmarker.grid(
+            row=7, column=1, sticky="sew", padx=2, pady=2
+            )
         # Collect whether check buttons are checked or not
         user_question_submit = ttk.Button(
             window, text="Submit", style="Header.TButton",
@@ -248,7 +349,9 @@ def main():
                 ]
             )
         )
-        user_question_submit.grid(row=8, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        user_question_submit.grid(
+            row=8, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
+            )
         window.bind("<Escape>", lambda event: main_menu())
 
     def file_loader(file_name):
@@ -273,13 +376,12 @@ def main():
                 choices.extend(item['options'])
             if 'answer' in item:
                 answers.append(item['answer'])
-   
+
         quiz()
 
     def list_chooser():
         # This function will bring up a GUI that will allow users to choose
         # which file to import questions from
-        # List all files in Dependencies directory
         window.columnconfigure([0, 1], weight=0)
         window.columnconfigure([0], weight=1, uniform="chooser")
         window.rowconfigure([0, 1, 2, 3, 4, 5, 6], weight=0)
@@ -297,9 +399,12 @@ def main():
             window, text="Select a file to import questions from:",
             style="Header.TLabel"
             )
-        file_list_header.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        file_list_header.grid(
+            row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
+            )
         back = ttk.Button(
-            window, text="Back", command=lambda: main_menu(), style="Header.TButton"
+            window, text="Back", command=lambda: main_menu(),
+            style="Header.TButton"
             )
         back.grid(
             row=0,
@@ -366,10 +471,7 @@ def main():
                 answer4.configure(text=current_choices[3])
             except IndexError:
                 question.configure(text="The quiz is over!")
-                # forget all buttons except for the back button
-                # also forget every label except for the score and question label
                 for i in window.grid_slaves():
-                    # if the button is not the back, score, or question variable forget it
                     if i.grid_info()["row"] != 0 and i.grid_info()["row"] != 1:
                         i.grid_forget()
                 window.rowconfigure([2, 3], weight=0)
@@ -397,14 +499,14 @@ def main():
             pady=5
             )
         back = ttk.Button(
-            window, text="Back", command=lambda: main_menu(), style="Header.TButton"
+            window, text="Back", command=lambda: main_menu(),
+            style="Header.TButton"
             )
         back.grid(
             row=0,
             column=0,
             sticky="w"
             )
-        # Use a grid to present possible answers in a 2x2
         question = ttk.Label(
             window,
             text="Question",
