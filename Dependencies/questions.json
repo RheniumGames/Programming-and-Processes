@@ -9,6 +9,11 @@
             "question": "What is the capital of Sweden?",
             "options": ["Stockholm", "Oslo", "Gothenburg", "Helsinki"],
             "answer": "Stockholm"
+        },
+        {
+            "question": "What PEP is the style guide for Python?",
+            "options": ["PEP 8", "PEP 20", "PEP 232", "PEP 257"],
+            "answer": "PEP 8"
         }
     ]
 }
