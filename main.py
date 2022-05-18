@@ -78,18 +78,7 @@ def main():
                 font="Helvetica 12"
                 )
             style.configure(
-                "TEntry", foreground="black", anchor="center", justify="center"
-                )
-            style.configure(
-                "Question.TEntry", font="Helvetica 30", justify="center"
-                )
-            style.configure(
-                "Answer.TEntry", font="Helvetica 20", justify="center"
-                )
-            style.configure(
-                "Checkbutton.TCheckbutton", font="Helvetica 12",
-                justify="center", anchor="center", background="#1c1c1c",
-                foreground="white"
+                "TEntry", fieldbackground="#1c1c1c", foreground="white"
                 )
             style.configure(
                 "Header.TListbox", foreground="white", background="#1c1c1c",
@@ -151,17 +140,7 @@ def main():
                 font="Helvetica 12"
                 )
             style.configure(
-                "TEntry", foreground="black", anchor="center", justify="center"
-                )
-            style.configure(
-                "Question.TEntry", font="Helvetica 30", justify="center"
-                )
-            style.configure(
-                "Answer.TEntry", font="Helvetica 20", justify="center"
-                )
-            style.configure(
-                "Checkbutton.TCheckbutton", foreground="black",
-                background="#F0F0F0", font="Helvetica 12"
+                "TEntry", anchor="center", fieldbackground="#F4F4F4"
                 )
             style.configure(
                 "Header.TListbox", foreground="black", background="#F0F0F0",
@@ -218,6 +197,19 @@ def main():
             if correct_list[i] == "1":
                 correct_list_words.append(choices[i])
         print(correct_list_words)
+        with open(
+            f"{FILE_PATH}/Dependencies/new_questions.json", "w"
+                ) as file:
+            json.dump(
+                {
+                    "question": question,
+                    "answer": correct_list_words,
+                    "choices": choices
+                },
+                file,
+                indent=4
+                )
+            file.close()
 
     def main_menu():
         window.columnconfigure([0, 1], weight=0)
@@ -273,8 +265,9 @@ def main():
             sticky="w"
             )
         user_question = ttk.Entry(
-            window, style="Question.TEntry"
-        )
+            window, style="TEntry", justify="center",
+            font="Helvetica 16"
+            )
         user_question.grid(
             row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
             )
@@ -282,10 +275,13 @@ def main():
             window, text="Enter the first choice:", style="SubHeading.TLabel"
         )
         user_answer_1_header.grid(row=2, column=0, sticky="ew", padx=2, pady=2)
-        user_answer1 = tk.Entry(window, justify="center")
+        user_answer1 = ttk.Entry(
+            window, style="TEntry", justify="center",
+            font="Helvetica 16"
+            )
         user_answer1.grid(row=3, column=0, sticky="nsew", padx=5, pady=5)
         user_answer_1_correctmarker = ttk.Checkbutton(
-            window, text="Set Answer", style="Checkbutton.TCheckbutton"
+            window, text="Set Answer", style="TCheckbutton"
         )
         user_answer_1_correctmarker.grid(
             row=4, column=0, sticky="sew", padx=2, pady=2
@@ -294,7 +290,10 @@ def main():
             window, text="Enter the second choice:", style="SubHeading.TLabel"
         )
         user_answer_2_header.grid(row=2, column=1, sticky="ew", padx=2, pady=2)
-        user_answer2 = ttk.Entry(window, style="Answer.TEntry")
+        user_answer2 = ttk.Entry(
+            window, style="TEntry", justify="center",
+            font="Helvetica 16"
+            )
         user_answer2.grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
         user_answer_2_correctmarker = ttk.Checkbutton(
             window, text="Set Answer", style="Checkbutton.TCheckbutton"
@@ -306,7 +305,10 @@ def main():
             window, text="Enter the third choice", style="SubHeading.TLabel"
         )
         user_answer_3_header.grid(row=5, column=0, sticky="ew", padx=2, pady=2)
-        user_answer3 = ttk.Entry(window, style="BW.TEntry")
+        user_answer3 = ttk.Entry(
+            window, style="TEntry", justify="center",
+            font="Helvetica 16"
+            )
         user_answer3.grid(row=6, column=0, sticky="nsew", padx=5, pady=5)
         user_answer_3_correctmarker = ttk.Checkbutton(
             window, text="Set Answer", style="Checkbutton.TCheckbutton"
@@ -318,7 +320,10 @@ def main():
             window, text="Enter the fourth choice", style="SubHeading.TLabel"
         )
         user_answer_4_header.grid(row=5, column=1, sticky="ew", padx=2, pady=2)
-        user_answer4 = tk.Entry(window, justify="center")
+        user_answer4 = ttk.Entry(
+            window, style="TEntry", justify="center",
+            font="Helvetica 16"
+            )
         user_answer4.grid(row=6, column=1, sticky="nsew", padx=5, pady=5)
         user_answer_4_correctmarker = ttk.Checkbutton(
             window, text="Set Answer", style="Checkbutton.TCheckbutton"
