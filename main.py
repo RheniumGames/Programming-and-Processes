@@ -5,6 +5,8 @@ import json
 import os
 import random
 import time
+import typing
+from typing import List
 import tkinter as tk
 from tkinter import ttk
 
@@ -12,7 +14,7 @@ FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 questions = []
 choices = []
 answers = []
-current_choices = []
+current_choices: List[str] = []
 default_background = ''
 default_text_colour = ''
 score = 0
@@ -173,15 +175,10 @@ def main():
 
     def dump_questions(question, answer, choices):
         # Dumps the questions into the questions.json file
-        print(question)
-        print(answer)
-        print(choices)
         correct_list = []
         correct_list_words = []
-        print()
         # Extract 'selected' from tuple, and set empty tuples to 0
         for i in answer:
-            print("----")
             try:
                 if "selected" in i:
                     correct_list.append("1")
@@ -192,23 +189,31 @@ def main():
 
         # Loop through correct list, if there is a 1 in the list,
         # add the corresponding text in answers to correct_list_words
-        print(correct_list)
         for i in range(len(correct_list)):
             if correct_list[i] == "1":
                 correct_list_words.append(choices[i])
-        print(correct_list_words)
+        with open(
+            f"{FILE_PATH}/Dependencies/new_questions.json", "r"
+                ) as file:
+            try:
+                data = json.load(file)
+            except json.decoder.JSONDecodeError:
+                data: dict[str, ...] = {}
+            file.close()
+
+        if "QuestionList" not in data:
+            data["QuestionList"] = []
+        data["QuestionList"].append(
+            {
+                "question": question,
+                "options": choices,
+                "answer": str(correct_list_words[0])
+                }
+            )
         with open(
             f"{FILE_PATH}/Dependencies/new_questions.json", "w"
                 ) as file:
-            json.dump(
-                {
-                    "question": question,
-                    "answer": correct_list_words,
-                    "choices": choices
-                },
-                file,
-                indent=4
-                )
+            json.dump(data, file, indent=4)
             file.close()
 
     def main_menu():
@@ -481,7 +486,7 @@ def main():
                         i.grid_forget()
                 window.rowconfigure([2, 3], weight=0)
 
-        def check_answer(answer):
+        def check_answer(answer) -> int:
             global score
             try:
                 if answer == answers[0]:
@@ -491,7 +496,7 @@ def main():
                 new_question()
                 return score
             except IndexError:
-                pass
+                return 0
 
         score_display = ttk.Label(
             window, text=f"Score: {str(score)}", style="Header.TLabel"
