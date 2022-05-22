@@ -5,10 +5,10 @@ import json
 import os
 import random
 import time
-import typing
-from typing import List
 import tkinter as tk
+import typing
 from tkinter import ttk
+from typing import List
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 questions = []
@@ -192,16 +192,21 @@ def main():
         for i in range(len(correct_list)):
             if correct_list[i] == "1":
                 correct_list_words.append(choices[i])
-        # Create a file called hello.json in the current directory
-        open(f"{FILE_PATH}/Dependencies/{filename}.json", "w")
-        with open(
-            f"{FILE_PATH}/Dependencies/{filename}.json", "r"
-                ) as file:
-            try:
-                data = json.load(file)
-            except json.decoder.JSONDecodeError:
+        try:
+            with open(
+                f"{FILE_PATH}/Dependencies/{filename}.json", "r"
+                    ) as file:
+                try:
+                    data = json.load(file)
+                except json.decoder.JSONDecodeError:
+                    data: dict[str, ...] = {}
+                file.close()
+        except FileNotFoundError:
+            with open(
+                f"{FILE_PATH}/Dependencies/{filename}.json", "w"
+                    ) as file:
                 data: dict[str, ...] = {}
-            file.close()
+                file.close()
 
         if "QuestionList" not in data:
             data["QuestionList"] = []
