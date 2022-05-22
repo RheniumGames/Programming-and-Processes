@@ -2,18 +2,43 @@
     "QuestionList": [
         {
             "question": "What is the capital of Spain?",
-            "options": ["Madrid", "Barcelona", "Seville", "Valencia"],
+            "options": [
+                "Madrid",
+                "Barcelona",
+                "Seville",
+                "Valencia"
+            ],
             "answer": "Madrid"
         },
         {
             "question": "What is the capital of Sweden?",
-            "options": ["Stockholm", "Oslo", "Gothenburg", "Helsinki"],
+            "options": [
+                "Stockholm",
+                "Oslo",
+                "Gothenburg",
+                "Helsinki"
+            ],
             "answer": "Stockholm"
         },
         {
             "question": "What PEP is the style guide for Python?",
-            "options": ["PEP 8", "PEP 20", "PEP 232", "PEP 257"],
+            "options": [
+                "PEP 8",
+                "PEP 20",
+                "PEP 232",
+                "PEP 257"
+            ],
             "answer": "PEP 8"
+        },
+        {
+            "question": "What is the capital of France?",
+            "options": [
+                "Paris",
+                "Nice",
+                "Marseille",
+                "Strasbourg"
+            ],
+            "answer": "Paris"
         }
     ]
 }
