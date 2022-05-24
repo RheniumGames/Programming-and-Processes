@@ -3,5 +3,10 @@
         {
             "colourScheme": "light"
         }
+    ],
+    "QuizData": [
+        {
+            "totalScore": 0
+        }
     ]
 }
