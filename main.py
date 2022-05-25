@@ -23,6 +23,8 @@ with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
     user_settings = json.load(file)
     file.close()
 
+globalscore = user_settings["QuizData"][0]["totalScore"]
+
 
 def main():
     row_number = 1
@@ -31,7 +33,6 @@ def main():
     window.geometry("1280x720")
     window.resizable(False, False)
     style = ttk.Style()
-    style.theme_create("dark")
 
     def change_theme(theme, bypass=False):
         global default_background
@@ -41,7 +42,9 @@ def main():
             global default_background
             global default_text_colour
             window.configure(background="#1c1c1c")
-            style.theme_use("dark")
+            style.theme_use("default")
+            style.map('TButton', background=[('active', '#212121')])
+            style.map('TCheckbutton', background=[('active', '#1c1c1c')])
             style.configure(
                 "TButton", foreground="white", background="#1c1c1c",
                 font="Helvetica 12", padding="5 5 5 5"
@@ -79,6 +82,7 @@ def main():
                 "TCheckbutton", foreground="white", background="#1c1c1c",
                 font="Helvetica 12"
                 )
+            print(style.configure("TCheckbutton"))
             style.configure(
                 "TEntry", fieldbackground="#1c1c1c", foreground="white"
                 )
@@ -104,6 +108,8 @@ def main():
             global default_text_colour
             window.configure(background="#F0F0F0")
             style.theme_use("default")
+            style.map('TButton', background=[('active', '#E0E0E0')])
+            style.map('TCheckbutton', background=[('active', '#F0F0F0')])
             style.configure(
                 "TButton", foreground="black", background="#F0F0F0",
                 font="Helvetica 12", padding="5 5 5 5"
@@ -251,6 +257,14 @@ def main():
             style="Header.TButton"
         )
         theme_change_button.grid(row=2, column=0)
+        scorelabel = ttk.Label(
+            window,
+            text="Over all of your attempts, you have scored: "
+            f"{globalscore} points",
+            style="SubHeading.TLabel",
+            padding="15"
+        )
+        scorelabel.grid(row=3, column=0)
         window.bind("<Escape>", lambda event: window.destroy())
 
     def question_maker():
@@ -446,6 +460,7 @@ def main():
             window,
             yscrollcommand=file_list_scrollbar.set,
             selectmode="single",
+            justify="center",
             font=("Helvetica", 20),
             background=default_background,
             foreground=default_text_colour
@@ -460,6 +475,14 @@ def main():
             file_list_listbox.insert("end", i)
         file_list_listbox.bind(
             "<Double-Button-1>",
+            lambda event: file_loader(
+                file_list_listbox.get(
+                    file_list_listbox.curselection()
+                    )
+                )
+            )
+        file_list_listbox.bind(
+            "<Return>",
             lambda event: file_loader(
                 file_list_listbox.get(
                     file_list_listbox.curselection()
@@ -501,9 +524,11 @@ def main():
 
         def check_answer(answer) -> int:
             global score
+            global globalscore
             try:
                 if answer == answers[0]:
                     score += 1
+                    globalscore += 1
                     score_display.configure(text=f"Score: {str(score)}")
                 answers[:1] = []
                 new_question()
@@ -522,7 +547,7 @@ def main():
             pady=5
             )
         back = ttk.Button(
-            window, text="Back", command=lambda: main_menu(),
+            window, text="Back", command=lambda: list_chooser(),
             style="Header.TButton"
             )
         back.grid(
@@ -609,6 +634,25 @@ def main():
     change_theme(None, True)
 
     main_menu()
+
+    def quit_program():
+        print('Hi')
+        with open(
+            f"{FILE_PATH}/Dependencies/user_settings.json", "r"
+                ) as file:
+            data = json.load(file)
+
+        # Replace the old score with the new score
+        data["QuizData"][0]["totalScore"] = globalscore
+        with open(
+            f"{FILE_PATH}/Dependencies/user_settings.json", "w"
+                ) as file:
+            json.dump(data, file, indent=4)
+            file.close()
+
+        window.destroy()
+
+    window.protocol("WM_DELETE_WINDOW", quit_program)
 
     window.mainloop()
 
