@@ -19,9 +19,29 @@ default_background = ''
 default_text_colour = ''
 score = 0
 
-with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
-    user_settings = json.load(file)
-    file.close()
+try:
+    with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
+        user_settings = json.load(file)
+        file.close()
+except FileNotFoundError:
+    with open(f"{FILE_PATH}/Dependencies/user_settings.json", "w") as file:
+        json.dump({
+            "Settings": [
+                {
+                    "colourScheme": "light"
+                }
+            ],
+            "QuizData": [
+                {
+                    "totalScore": 0
+                }
+            ]
+        }
+        , file, indent=4)
+        file.close()
+    with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
+        user_settings = json.load(file)
+        file.close()
 
 globalscore = user_settings["QuizData"][0]["totalScore"]
 
@@ -82,7 +102,6 @@ def main():
                 "TCheckbutton", foreground="white", background="#1c1c1c",
                 font="Helvetica 12"
                 )
-            print(style.configure("TCheckbutton"))
             style.configure(
                 "TEntry", fieldbackground="#1c1c1c", foreground="white"
                 )
@@ -636,7 +655,6 @@ def main():
     main_menu()
 
     def quit_program():
-        print('Hi')
         with open(
             f"{FILE_PATH}/Dependencies/user_settings.json", "r"
                 ) as file:
