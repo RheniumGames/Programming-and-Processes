@@ -9,6 +9,7 @@ import tkinter as tk
 import typing
 from tkinter import ttk
 from typing import List
+from styling import ThemeChanger
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 questions = []
@@ -23,7 +24,7 @@ try:
     with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
         user_settings = json.load(file)
         file.close()
-except FileNotFoundError:
+except FileNotFoundError as error:
     with open(f"{FILE_PATH}/Dependencies/user_settings.json", "w") as file:
         json.dump({
             "Settings": [
@@ -39,11 +40,13 @@ except FileNotFoundError:
         }
         , file, indent=4)
         file.close()
+        print(error)
     with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
         user_settings = json.load(file)
         file.close()
 
 globalscore = user_settings["QuizData"][0]["totalScore"]
+theme = user_settings["Settings"][0]["colourScheme"]
 
 
 def main():
@@ -54,149 +57,8 @@ def main():
     window.resizable(False, False)
     style = ttk.Style()
 
-    def change_theme(theme, bypass=False):
-        global default_background
-        global default_text_colour
-
-        def darkmode():
-            global default_background
-            global default_text_colour
-            window.configure(background="#1c1c1c")
-            style.theme_use("default")
-            style.map('TButton', background=[('active', '#212121')])
-            style.map('TCheckbutton', background=[('active', '#1c1c1c')])
-            style.configure(
-                "TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 12", padding="5 5 5 5"
-                )
-            style.configure(
-                "Header.TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 20", padding="5 5 5 5", anchor="center"
-                )
-            style.configure(
-                "TLabel", foreground="white", background="#1c1c1c",
-                font="Helvetica 12", anchor="center"
-                )
-            style.configure(
-                "SubHeading.TLabel", foreground="white", background="#1c1c1c",
-                font="Helvetica 16", anchor="center"
-                )
-            style.configure(
-                "Header.TLabel", foreground="white", background="#1c1c1c",
-                font="Helvetica 20", anchor="center"
-                )
-            style.configure(
-                "Title.TLabel", foreground="white", background="#1c1c1c",
-                font="Helvetica 30", anchor="center"
-                )
-            style.configure(
-                "TFrame", foreground="white", background="#1c1c1c"
-                )
-            style.configure(
-                "TScrollbar", foreground="white", background="#1c1c1c"
-                )
-            style.configure(
-                "TProgressbar", foreground="white", background="#1c1c1c"
-                )
-            style.configure(
-                "TCheckbutton", foreground="white", background="#1c1c1c",
-                font="Helvetica 12"
-                )
-            style.configure(
-                "TEntry", fieldbackground="#1c1c1c", foreground="white"
-                )
-            style.configure(
-                "Header.TListbox", foreground="white", background="#1c1c1c",
-                font="Helvetica 20", padding="5 5 5 5"
-                )
-            style.configure(
-                "Vertical.Header.TScrollbar", foreground="white",
-                background="#1c1c1c", font="Helvetica 12", padding="5 0 5 0"
-                )
-            default_background = "#1c1c1c"
-            default_text_colour = "white"
-            user_settings["Settings"][0]["colourScheme"] = "dark"
-            with open(
-                f"{FILE_PATH}/Dependencies/user_settings.json", "w"
-                    ) as file:
-                json.dump(user_settings, file, indent=4)
-                file.close()
-
-        def lightmode():
-            global default_background
-            global default_text_colour
-            window.configure(background="#F0F0F0")
-            style.theme_use("default")
-            style.map('TButton', background=[('active', '#E0E0E0')])
-            style.map('TCheckbutton', background=[('active', '#F0F0F0')])
-            style.configure(
-                "TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 12", padding="5 5 5 5"
-                )
-            style.configure(
-                "Header.TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 20", padding="5 5 5 5"
-                )
-            style.configure(
-                "TLabel", foreground="black", background="#F0F0F0",
-                font="Helvetica 12", anchor="center"
-                )
-            style.configure(
-                "SubHeading.TLabel", foreground="black", background="#F0F0F0",
-                font="Helvetica 16", anchor="center"
-                )
-            style.configure(
-                "Header.TLabel", foreground="black", background="#F0F0F0",
-                font="Helvetica 20", anchor="center"
-                )
-            style.configure(
-                "Title.TLabel", foreground="black", background="#F0F0F0",
-                font="Helvetica 30", anchor="center"
-                )
-            style.configure(
-                "TFrame", foreground="black", background="#F0F0F0"
-                )
-            style.configure(
-                "TScrollbar", foreground="black", background="#F0F0F0"
-                )
-            style.configure(
-                "TProgressbar", foreground="black", background="#F0F0F0"
-                )
-            style.configure(
-                "TCheckbutton", foreground="black", background="#F0F0F0",
-                font="Helvetica 12"
-                )
-            style.configure(
-                "TEntry", anchor="center", fieldbackground="#F4F4F4"
-                )
-            style.configure(
-                "Header.TListbox", foreground="black", background="#F0F0F0",
-                font="Helvetica 20", padding="5 5 5 5"
-                )
-            style.configure(
-                "Vertical.Header.TScrollbar", foreground="black",
-                background="#F0F0F0", font="Helvetica 12", padding="5 5 5 5"
-                )
-            default_background = "#F0F0F0"
-            default_text_colour = "black"
-            user_settings["Settings"][0]["colourScheme"] = "light"
-            with open(
-                f"{FILE_PATH}/Dependencies/user_settings.json", "w"
-                    ) as file:
-                json.dump(user_settings, file, indent=4)
-                file.close()
-
-        if theme == "#1c1c1c" and bypass is not True:
-            lightmode()
-
-        elif theme == "#F0F0F0" and bypass is not True:
-            darkmode()
-
-        elif user_settings["Settings"][0]["colourScheme"] == "dark":
-            darkmode()
-
-        elif user_settings["Settings"][0]["colourScheme"] == "light":
-            lightmode()
+    styling=ThemeChanger(window, style)
+    print(ThemeChanger(window, style))
 
     def dump_questions(question, answer, choices, filename):
         # Dumps the questions into the questions.json file
@@ -272,7 +134,7 @@ def main():
         question_maker_button.grid(row=1, column=0)
         theme_change_button = ttk.Button(
             window, text="Change Theme",
-            command=lambda: change_theme(window.cget("bg"), False),
+            command=lambda: styling.change_theme(window.cget("bg"), False),
             style="Header.TButton"
         )
         theme_change_button.grid(row=2, column=0)
@@ -481,8 +343,8 @@ def main():
             selectmode="single",
             justify="center",
             font=("Helvetica", 20),
-            background=default_background,
-            foreground=default_text_colour
+            background=styling.default_colours(theme, "background"),
+            foreground=styling.default_colours(theme, "foreground")
             )
         file_list_listbox.grid(
             row=1,
@@ -650,7 +512,7 @@ def main():
             )
         window.bind("<Escape>", lambda event: list_chooser())
 
-    change_theme(None, True)
+    styling.change_theme(None, True)
 
     main_menu()
 
