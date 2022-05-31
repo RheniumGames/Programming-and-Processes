@@ -58,7 +58,13 @@ def main():
     style = ttk.Style()
 
     styling=ThemeChanger(window, style)
-    print(ThemeChanger(window, style))
+
+    def collect_default() -> None:
+        global default_background
+        global default_text_colour
+        default_background = styling.default_colours(theme, "background")
+        default_text_colour = styling.default_colours(theme, "foreground")
+        return
 
     def dump_questions(question, answer, choices, filename):
         # Dumps the questions into the questions.json file
@@ -138,6 +144,7 @@ def main():
             style="Header.TButton"
         )
         theme_change_button.grid(row=2, column=0)
+        theme_change_button.bind("<Button-1>", lambda event: collect_default())
         scorelabel = ttk.Label(
             window,
             text="Over all of your attempts, you have scored: "
@@ -343,8 +350,8 @@ def main():
             selectmode="single",
             justify="center",
             font=("Helvetica", 20),
-            background=styling.default_colours(theme, "background"),
-            foreground=styling.default_colours(theme, "foreground")
+            background=default_background,
+            foreground=default_text_colour
             )
         file_list_listbox.grid(
             row=1,
@@ -513,6 +520,8 @@ def main():
         window.bind("<Escape>", lambda event: list_chooser())
 
     styling.change_theme(None, True)
+
+    collect_default()
 
     main_menu()
 
