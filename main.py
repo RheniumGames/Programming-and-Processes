@@ -289,6 +289,7 @@ def main():
         choices = []
         answers = []
         score = 0
+        file_name = file_name.lower()
         with open(f"{FILE_PATH}/Dependencies/{file_name}.json", "r") as file:
             data = json.load(file)
             file.close()
