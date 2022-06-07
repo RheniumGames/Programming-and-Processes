@@ -82,6 +82,7 @@ def main():
 
         # Loop through correct list, if there is a 1 in the list,
         # add the corresponding text in answers to correct_list_words
+        filename = filename.replace(".json", "").lower()
         for i in range(len(correct_list)):
             if correct_list[i] == "1":
                 correct_list_words.append(choices[i])
@@ -167,6 +168,14 @@ def main():
             window, style="TEntry", justify="center",
             font="Helvetica 16"
             )
+        file_name.insert(0, "Enter a file name")
+        print(file_name.get())
+        def delete_filename(text):
+            if text == "Enter a file name":
+                file_name.delete(0, "end")
+            else:
+                pass
+        file_name.bind("<Button-1>", lambda event: delete_filename(file_name.get()))
         file_name.grid(row=0, column=0, columnspan=2)
         user_question_header = ttk.Label(
             window, text="Enter your question here:", style="Header.TLabel"
@@ -345,39 +354,39 @@ def main():
             column=1,
             sticky="ns"
             )
-        file_list_listbox = tk.Listbox(
+        # file_list_listbox = tk.Listbox(
+        #     window,
+        #     yscrollcommand=file_list_scrollbar.set,
+        #     selectmode="single",
+        #     justify="center",
+        #     font=("Helvetica", 20),
+        #     background=default_background,
+        #     foreground=default_text_colour
+        #     )
+        file_list_treeview = ttk.Treeview(
             window,
+            columns=0,
+            show="tree",
+            displaycolumns=("0"),
+            cursor="hand1",
+            selectmode="extended",
+            style="Treeview",
             yscrollcommand=file_list_scrollbar.set,
-            selectmode="single",
-            justify="center",
-            font=("Helvetica", 20),
-            background=default_background,
-            foreground=default_text_colour
             )
-        file_list_listbox.grid(
+        file_list_treeview.grid(
             row=1,
             column=0,
             sticky="nsew"
             )
-        file_list_scrollbar.config(command=file_list_listbox.yview)
+        # https://stackoverflow.com/questions/8688839/remove-empty-first-column-of-a-treeview-object
+        file_list_treeview.column("#0", width = 0, stretch="no")
+        file_list_treeview.column(column=0, anchor="center")
         for i in file_list:
-            file_list_listbox.insert("end", i)
-        file_list_listbox.bind(
-            "<Double-Button-1>",
-            lambda event: file_loader(
-                file_list_listbox.get(
-                    file_list_listbox.curselection()
-                    )
-                )
-            )
-        file_list_listbox.bind(
-            "<Return>",
-            lambda event: file_loader(
-                file_list_listbox.get(
-                    file_list_listbox.curselection()
-                    )
-                )
-            )
+            file_list_treeview.insert("", "end", text=i, values=(i))
+        file_list_treeview.bind("<Double-1>", lambda event: file_loader(
+            file_list_treeview.item(file_list_treeview.selection())["values"][0]
+            ))
+        file_list_scrollbar.config(command=file_list_treeview.yview)
         window.bind("<Escape>", lambda event: main_menu())
 
     def quiz():
