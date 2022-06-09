@@ -24,6 +24,13 @@ class ThemeChanger:
             style.theme_use("default")
             style.map('TButton', background=[('active', '#212121')])
             style.map('TCheckbutton', background=[('active', '#1c1c1c')])
+            # The fix for the Treeview was found on this stack overflow article
+            # https://stackoverflow.com/questions/58063067/unable-to-change-background-color-of-treeview-in-python
+            style.map(
+                "Treeview",
+                foreground=[('disabled', '#a3a3a3'), ('selected', '#ffffff')],
+                background=[('disabled', '#d9d9d9'), ('selected', '#4a6984')]
+                )
             style.configure(
                 "TButton", foreground="white", background="#1c1c1c",
                 font="Helvetica 12", padding="5 5 5 5"
@@ -49,6 +56,19 @@ class ThemeChanger:
                 font="Helvetica 30", anchor="center"
                 )
             style.configure(
+                "Error.TLabel", foreground="white", background="red",
+                font="Helvetica 24", anchor="center"
+            )
+            style.configure(
+                "Success.TLabel", foreground="black", background="#00FF21",
+                font="Helvetica 24", anchor="center"
+            )
+            style.configure(
+                "Treeview", foreground="white", background="#1c1c1c",
+                font="Helvetica 20", anchor="center", justify="center",
+                rowheight=30, fieldbackground="#1c1c1c"
+                )
+            style.configure(
                 "TFrame", foreground="white", background="#1c1c1c"
                 )
             style.configure(
@@ -62,7 +82,8 @@ class ThemeChanger:
                 font="Helvetica 12"
                 )
             style.configure(
-                "TEntry", fieldbackground="#1c1c1c", foreground="white"
+                "TEntry", anchor="center", fieldbackground="#1c1c1c",
+                foreground="white"
                 )
             style.configure(
                 "Header.TListbox", foreground="white", background="#1c1c1c",
@@ -88,6 +109,11 @@ class ThemeChanger:
             style.theme_use("default")
             style.map('TButton', background=[('active', '#E0E0E0')])
             style.map('TCheckbutton', background=[('active', '#F0F0F0')])
+            style.map(
+                "Treeview",
+                foreground=[('disabled', '#a3a3a3'), ('selected', '#ffffff')],
+                background=[('disabled', '#d9d9d9'), ('selected', '#4a6984')]
+                )
             style.configure(
                 "TButton", foreground="black", background="#F0F0F0",
                 font="Helvetica 12", padding="5 5 5 5"
@@ -113,6 +139,19 @@ class ThemeChanger:
                 font="Helvetica 30", anchor="center"
                 )
             style.configure(
+                "Error.TLabel", foreground="white", background="red",
+                font="Helvetica 24", anchor="center"
+            )
+            style.configure(
+                "Success.TLabel", foreground="black", background="#00FF21",
+                font="Helvetica 24", anchor="center"
+            )
+            style.configure(
+                "Treeview", foreground="black", background="#F0F0F0",
+                font="Helvetica 20", anchor="center", justify="center",
+                rowheight=30, fieldbackground="#F0F0F0"
+                )
+            style.configure(
                 "TFrame", foreground="black", background="#F0F0F0"
                 )
             style.configure(
@@ -126,7 +165,8 @@ class ThemeChanger:
                 font="Helvetica 12"
                 )
             style.configure(
-                "TEntry", anchor="center", fieldbackground="#F4F4F4"
+                "TEntry", anchor="center", fieldbackground="#F4F4F4",
+                foreground="black"
                 )
             style.configure(
                 "Header.TListbox", foreground="black", background="#F0F0F0",

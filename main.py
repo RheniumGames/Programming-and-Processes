@@ -48,12 +48,26 @@ except FileNotFoundError as error:
 globalscore = user_settings["QuizData"][0]["totalScore"]
 theme = user_settings["Settings"][0]["colourScheme"]
 
+class NoFileNameError(Exception):
+    pass
+
+class NoQuestionError(Exception):
+    pass
+
+class NoAnswerError(Exception):
+    pass
+
+class NoChoiceError(Exception):
+    pass
+
 
 def main():
     row_number = 1
     window = tk.Tk()
     window.title("Revision Tool")
-    window.geometry("1280x720")
+    WIDTH = 1280
+    HEIGHT = 720
+    window.geometry(f"{WIDTH}x{HEIGHT}")
     window.resizable(False, False)
     style = ttk.Style()
 
@@ -65,58 +79,107 @@ def main():
         default_background = styling.default_colours(theme, "background")
         default_text_colour = styling.default_colours(theme, "foreground")
         return
+    
+    def error_message(window, text, seconds) -> None:
+        message = ttk.Label(
+            window,
+            text=text,
+            style="Error.TLabel"
+        )
+        message.place(
+            x=WIDTH / 4,
+            y=HEIGHT / 4,
+            width=WIDTH / 2,
+            height=HEIGHT / 2
+        )
+        message.after(int(seconds * 1000), lambda: message.destroy())
+        return
+    
+    def success_message(window, text, seconds) -> None:
+        message = ttk.Label(
+            window,
+            text=text,
+            style="Success.TLabel"
+        )
+        message.place(
+            x=WIDTH / 4,
+            y=HEIGHT / 4,
+            width=WIDTH / 2,
+            height=HEIGHT / 2
+        )
+        message.after(int(seconds * 1000), lambda: message.destroy())
+        return
 
     def dump_questions(question, answer, choices, filename):
-        # Dumps the questions into the questions.json file
-        correct_list = []
-        correct_list_words = []
-        # Extract 'selected' from tuple, and set empty tuples to 0
-        for i in answer:
-            try:
-                if "selected" in i:
-                    correct_list.append("1")
-                else:
-                    correct_list.append("0")
-            except IndexError:
-                correct_list.append("0")
-
-        # Loop through correct list, if there is a 1 in the list,
-        # add the corresponding text in answers to correct_list_words
-        filename = filename.replace(".json", "").lower()
-        for i in range(len(correct_list)):
-            if correct_list[i] == "1":
-                correct_list_words.append(choices[i])
         try:
-            with open(
-                f"{FILE_PATH}/Dependencies/{filename}.json", "r"
-                    ) as file:
+            if (filename == "" or filename is None or
+                filename.lower() == "enter a file name"):
+                raise NoFileNameError
+            if question == "":
+                raise NoQuestionError
+            if "" in choices:
+                raise NoChoiceError
+            # Dumps the questions into the questions.json file
+            correct_list = []
+            correct_list_words = []
+            # Extract 'selected' from tuple, and set empty tuples to 0
+            for i in answer:
                 try:
-                    data = json.load(file)
-                except json.decoder.JSONDecodeError:
+                    if "selected" in i:
+                        correct_list.append("1")
+                    else:
+                        correct_list.append("0")
+                except IndexError:
+                    correct_list.append("0")
+            print(correct_list)
+            if '1' not in correct_list:
+                raise NoAnswerError
+
+            # Loop through correct list, if there is a 1 in the list,
+            # add the corresponding text in answers to correct_list_words
+            filename = filename.replace(".json", "").lower()
+            for i in range(len(correct_list)):
+                if correct_list[i] == "1":
+                    correct_list_words.append(choices[i])
+            try:
+                with open(
+                    f"{FILE_PATH}/Dependencies/{filename}.json", "r"
+                        ) as file:
+                    try:
+                        data = json.load(file)
+                    except json.decoder.JSONDecodeError:
+                        data: dict[str, ...] = {}
+                    file.close()
+            except FileNotFoundError:
+                with open(
+                    f"{FILE_PATH}/Dependencies/{filename}.json", "w"
+                        ) as file:
                     data: dict[str, ...] = {}
-                file.close()
-        except FileNotFoundError:
+                    file.close()
+
+            if "QuestionList" not in data:
+                data["QuestionList"] = []
+            data["QuestionList"].append(
+                {
+                    "question": question,
+                    "options": choices,
+                    "answer": str(correct_list_words[0])
+                    }
+                )
             with open(
                 f"{FILE_PATH}/Dependencies/{filename}.json", "w"
                     ) as file:
-                data: dict[str, ...] = {}
+                json.dump(data, file, indent=4)
                 file.close()
-
-        if "QuestionList" not in data:
-            data["QuestionList"] = []
-        data["QuestionList"].append(
-            {
-                "question": question,
-                "options": choices,
-                "answer": str(correct_list_words[0])
-                }
-            )
-        with open(
-            f"{FILE_PATH}/Dependencies/{filename}.json", "w"
-                ) as file:
-            json.dump(data, file, indent=4)
-            file.close()
-
+            success_message(window, "Question added successfully!", 1.5)
+        except NoFileNameError:
+            error_message(window, "Please enter a file name", 1.5)
+        except NoQuestionError:
+            error_message(window, "Please enter a question", 1.5)
+        except NoAnswerError:
+            error_message(window, "Please select an answer", 1.5)
+        except NoChoiceError:
+            error_message(window, "Please create four choices", 1.5)
     def main_menu():
         window.columnconfigure([0, 1], weight=0)
         window.columnconfigure([0], weight=1, uniform="group2")
@@ -185,7 +248,7 @@ def main():
             )
         back = ttk.Button(
             window, text="Back", command=lambda: main_menu(),
-            style="Header.TButton"
+            style="Header.TButton", takefocus=0
             )
         back.grid(
             row=0,
@@ -209,7 +272,7 @@ def main():
             )
         user_answer1.grid(row=4, column=0, sticky="nsew", padx=5, pady=5)
         user_answer_1_correctmarker = ttk.Checkbutton(
-            window, text="Set Answer", style="TCheckbutton"
+            window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
         user_answer_1_correctmarker.grid(
             row=5, column=0, sticky="sew", padx=2, pady=2
@@ -224,7 +287,7 @@ def main():
             )
         user_answer2.grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
         user_answer_2_correctmarker = ttk.Checkbutton(
-            window, text="Set Answer", style="Checkbutton.TCheckbutton"
+            window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
         user_answer_2_correctmarker.grid(
             row=5, column=1, sticky="sew", padx=2, pady=2
@@ -239,7 +302,7 @@ def main():
             )
         user_answer3.grid(row=7, column=0, sticky="nsew", padx=5, pady=5)
         user_answer_3_correctmarker = ttk.Checkbutton(
-            window, text="Set Answer", style="Checkbutton.TCheckbutton"
+            window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
         user_answer_3_correctmarker.grid(
             row=8, column=0, sticky="sew", padx=2, pady=2
@@ -254,7 +317,7 @@ def main():
             )
         user_answer4.grid(row=7, column=1, sticky="nsew", padx=5, pady=5)
         user_answer_4_correctmarker = ttk.Checkbutton(
-            window, text="Set Answer", style="Checkbutton.TCheckbutton"
+            window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
         user_answer_1_correctmarker.state(["!alternate"])
         user_answer_2_correctmarker.state(["!alternate"])
@@ -265,7 +328,7 @@ def main():
             )
         # Collect whether check buttons are checked or not
         user_question_submit = ttk.Button(
-            window, text="Submit", style="Header.TButton",
+            window, text="Submit", style="Header.TButton", takefocus=0,
             command=lambda: dump_questions(
                 user_question.get(),
                 [
@@ -368,7 +431,6 @@ def main():
             columns=0,
             show="tree",
             displaycolumns=("0"),
-            cursor="hand1",
             selectmode="extended",
             style="Treeview",
             yscrollcommand=file_list_scrollbar.set,
@@ -428,6 +490,9 @@ def main():
                     score += 1
                     globalscore += 1
                     score_display.configure(text=f"Score: {str(score)}")
+                    success_message(window, "Correct!", 0.5)
+                else:
+                    error_message(window, "Incorrect!", 0.5)
                 answers[:1] = []
                 new_question()
                 return score
