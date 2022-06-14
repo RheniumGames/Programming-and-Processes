@@ -11,6 +11,7 @@ from tkinter import ttk
 from typing import List
 from styling import ThemeChanger
 
+# Global variables
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 questions = []
 choices = []
@@ -20,6 +21,7 @@ default_background = ''
 default_text_colour = ''
 score = 0
 
+# Loads the user information from the corresponding json file
 try:
     with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
         user_settings = json.load(file)
@@ -45,9 +47,11 @@ except FileNotFoundError as error:
         user_settings = json.load(file)
         file.close()
 
+# More global variables
 globalscore = user_settings["QuizData"][0]["totalScore"]
 theme = user_settings["Settings"][0]["colourScheme"]
 
+# Custom error handling
 class NoFileNameError(Exception):
     pass
 
@@ -61,6 +65,7 @@ class NoChoiceError(Exception):
     pass
 
 
+# Define the main function
 def main():
     row_number = 1
     window = tk.Tk()
@@ -110,7 +115,35 @@ def main():
         message.after(int(seconds * 1000), lambda: message.destroy())
         return
 
-    def dump_questions(question, answer, choices, filename):
+    def error_button(button, text, seconds) -> None:
+        button.config(
+            text=text,
+            style="Error.TButton",
+            state="disabled"
+        )
+        button.after(
+            int(seconds * 1000),
+            lambda: button.config(
+                text="Submit", state="normal", style="Header.TButton"
+                )
+            )
+        return
+    
+    def success_button(button, text, seconds) -> None:
+        button.config(
+            text=text,
+            style="Success.TButton",
+            state="disabled"
+        )
+        button.after(
+            int(seconds * 1000),
+            lambda: button.config(
+                text="Submit", state="normal", style="Header.TButton"
+                )
+            )
+        return
+    
+    def dump_questions(question, answer, choices, filename, element):
         try:
             if (filename == "" or filename is None or
                 filename.lower() == "enter a file name"):
@@ -171,15 +204,17 @@ def main():
                     ) as file:
                 json.dump(data, file, indent=4)
                 file.close()
-            success_message(window, "Question added successfully!", 1.5)
+            success_button(element, "Question added successfully!", 1.5)
         except NoFileNameError:
-            error_message(window, "Please enter a file name", 1.5)
+            error_button(element, "Please enter a file name", 1.5)
         except NoQuestionError:
-            error_message(window, "Please enter a question", 1.5)
+            error_button(element, "Please enter a question", 1.5)
         except NoAnswerError:
-            error_message(window, "Please select an answer", 1.5)
+            error_button(element, "Please select an answer", 1.5)
         except NoChoiceError:
-            error_message(window, "Please create four choices", 1.5)
+            error_button(element, "Please create four choices", 1.5)
+        return
+
     def main_menu():
         window.columnconfigure([0, 1], weight=0)
         window.columnconfigure([0], weight=1, uniform="group2")
@@ -238,7 +273,10 @@ def main():
                 file_name.delete(0, "end")
             else:
                 pass
-        file_name.bind("<Button-1>", lambda event: delete_filename(file_name.get()))
+        file_name.bind(
+            "<Button-1>",
+            lambda event: delete_filename(file_name.get())
+            )
         file_name.grid(row=0, column=0, columnspan=2)
         user_question_header = ttk.Label(
             window, text="Enter your question here:", style="Header.TLabel"
@@ -262,88 +300,89 @@ def main():
         user_question.grid(
             row=2, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
             )
-        user_answer_1_header = ttk.Label(
+        header_1 = ttk.Label(
             window, text="Enter the first choice:", style="SubHeading.TLabel"
         )
-        user_answer_1_header.grid(row=3, column=0, sticky="ew", padx=2, pady=2)
-        user_answer1 = ttk.Entry(
+        header_1.grid(row=3, column=0, sticky="ew", padx=2, pady=2)
+        answer_1 = ttk.Entry(
             window, style="TEntry", justify="center",
             font="Helvetica 16"
             )
-        user_answer1.grid(row=4, column=0, sticky="nsew", padx=5, pady=5)
-        user_answer_1_correctmarker = ttk.Checkbutton(
+        answer_1.grid(row=4, column=0, sticky="nsew", padx=5, pady=5)
+        correctmarker_1 = ttk.Checkbutton(
             window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
-        user_answer_1_correctmarker.grid(
+        correctmarker_1.grid(
             row=5, column=0, sticky="sew", padx=2, pady=2
             )
-        user_answer_2_header = ttk.Label(
+        header_1 = ttk.Label(
             window, text="Enter the second choice:", style="SubHeading.TLabel"
         )
-        user_answer_2_header.grid(row=3, column=1, sticky="ew", padx=2, pady=2)
-        user_answer2 = ttk.Entry(
+        header_1.grid(row=3, column=1, sticky="ew", padx=2, pady=2)
+        answer_2 = ttk.Entry(
             window, style="TEntry", justify="center",
             font="Helvetica 16"
             )
-        user_answer2.grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
-        user_answer_2_correctmarker = ttk.Checkbutton(
+        answer_2.grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
+        correctmarker_2 = ttk.Checkbutton(
             window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
-        user_answer_2_correctmarker.grid(
+        correctmarker_2.grid(
             row=5, column=1, sticky="sew", padx=2, pady=2
             )
-        user_answer_3_header = ttk.Label(
+        header_3 = ttk.Label(
             window, text="Enter the third choice", style="SubHeading.TLabel"
         )
-        user_answer_3_header.grid(row=6, column=0, sticky="ew", padx=2, pady=2)
-        user_answer3 = ttk.Entry(
+        header_3.grid(row=6, column=0, sticky="ew", padx=2, pady=2)
+        answer_3 = ttk.Entry(
             window, style="TEntry", justify="center",
             font="Helvetica 16"
             )
-        user_answer3.grid(row=7, column=0, sticky="nsew", padx=5, pady=5)
-        user_answer_3_correctmarker = ttk.Checkbutton(
+        answer_3.grid(row=7, column=0, sticky="nsew", padx=5, pady=5)
+        correctmarker_3 = ttk.Checkbutton(
             window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
-        user_answer_3_correctmarker.grid(
+        correctmarker_3.grid(
             row=8, column=0, sticky="sew", padx=2, pady=2
             )
-        user_answer_4_header = ttk.Label(
+        header_4 = ttk.Label(
             window, text="Enter the fourth choice", style="SubHeading.TLabel"
         )
-        user_answer_4_header.grid(row=6, column=1, sticky="ew", padx=2, pady=2)
-        user_answer4 = ttk.Entry(
+        header_4.grid(row=6, column=1, sticky="ew", padx=2, pady=2)
+        answer_4 = ttk.Entry(
             window, style="TEntry", justify="center",
             font="Helvetica 16"
             )
-        user_answer4.grid(row=7, column=1, sticky="nsew", padx=5, pady=5)
-        user_answer_4_correctmarker = ttk.Checkbutton(
+        answer_4.grid(row=7, column=1, sticky="nsew", padx=5, pady=5)
+        correctmarker_4 = ttk.Checkbutton(
             window, text="Set Answer", style="TCheckbutton", takefocus=0
         )
-        user_answer_1_correctmarker.state(["!alternate"])
-        user_answer_2_correctmarker.state(["!alternate"])
-        user_answer_3_correctmarker.state(["!alternate"])
-        user_answer_4_correctmarker.state(["!alternate"])
-        user_answer_4_correctmarker.grid(
+        correctmarker_4.grid(
             row=8, column=1, sticky="sew", padx=2, pady=2
             )
+        correctmarker_1.state(["!alternate"])
+        correctmarker_2.state(["!alternate"])
+        correctmarker_3.state(["!alternate"])
+        correctmarker_4.state(["!alternate"])
         # Collect whether check buttons are checked or not
         user_question_submit = ttk.Button(
             window, text="Submit", style="Header.TButton", takefocus=0,
             command=lambda: dump_questions(
                 user_question.get(),
                 [
-                    user_answer_1_correctmarker.state(),
-                    user_answer_2_correctmarker.state(),
-                    user_answer_3_correctmarker.state(),
-                    user_answer_4_correctmarker.state()
+                    correctmarker_1.state(),
+                    correctmarker_2.state(),
+                    correctmarker_3.state(),
+                    correctmarker_4.state()
                 ],
                 [
-                    user_answer1.get(),
-                    user_answer2.get(),
-                    user_answer3.get(),
-                    user_answer4.get()
+                    answer_1.get(),
+                    answer_2.get(),
+                    answer_3.get(),
+                    answer_4.get()
                 ],
-                file_name.get()
+                file_name.get(),
+                user_question_submit
             )
         )
         user_question_submit.grid(
@@ -393,11 +432,11 @@ def main():
         for i in range(len(file_list)):
             file_list[i] = file_list[i].replace(".json", "").title()
         file_list.sort()
-        file_list_header = ttk.Label(
+        header = ttk.Label(
             window, text="Select a file to import questions from:",
             style="Header.TLabel"
             )
-        file_list_header.grid(
+        header.grid(
             row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
             )
         back = ttk.Button(
@@ -409,46 +448,38 @@ def main():
             column=0,
             sticky="w"
             )
-        file_list_scrollbar = ttk.Scrollbar(
+        scrollbar = ttk.Scrollbar(
             window, orient="vertical"
             )
-        file_list_scrollbar.grid(
+        scrollbar.grid(
             row=1,
             column=1,
             sticky="ns"
             )
-        # file_list_listbox = tk.Listbox(
-        #     window,
-        #     yscrollcommand=file_list_scrollbar.set,
-        #     selectmode="single",
-        #     justify="center",
-        #     font=("Helvetica", 20),
-        #     background=default_background,
-        #     foreground=default_text_colour
-        #     )
-        file_list_treeview = ttk.Treeview(
+        treeview = ttk.Treeview(
             window,
             columns=0,
             show="tree",
             displaycolumns=("0"),
             selectmode="extended",
             style="Treeview",
-            yscrollcommand=file_list_scrollbar.set,
+            yscrollcommand=scrollbar.set,
             )
-        file_list_treeview.grid(
+        treeview.grid(
             row=1,
             column=0,
             sticky="nsew"
             )
         # https://stackoverflow.com/questions/8688839/remove-empty-first-column-of-a-treeview-object
-        file_list_treeview.column("#0", width = 0, stretch="no")
-        file_list_treeview.column(column=0, anchor="center")
+        treeview.column("#0", width = 0, stretch="no")
+        treeview.column(column=0, anchor="center")
         for i in file_list:
-            file_list_treeview.insert("", "end", text=i, values=(i))
-        file_list_treeview.bind("<Double-1>", lambda event: file_loader(
-            file_list_treeview.item(file_list_treeview.selection())["values"][0]
+            print(i)
+            treeview.insert("", "end", text=str(i), values=(i))
+        treeview.bind("<Double-1>", lambda event: file_loader(
+            treeview.item(treeview.selection())["values"][0]
             ))
-        file_list_scrollbar.config(command=file_list_treeview.yview)
+        scrollbar.config(command=treeview.yview)
         window.bind("<Escape>", lambda event: main_menu())
 
     def quiz():

@@ -9,6 +9,8 @@ with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
 
 class ThemeChanger:
 
+    __slots__ = ["style", "window"]
+
     def __init__(self, window, style):
         self.style = style
         self.window = window
@@ -22,7 +24,9 @@ class ThemeChanger:
             global default_text_colour
             window.configure(background="#1c1c1c")
             style.theme_use("default")
-            style.map('TButton', background=[('active', '#212121')])
+            style.map('TButton', background=[('active', '#212121')], foreground=[('disabled', 'black')])
+            style.map('Success.TButton', background=[('active', '#00ff00')], foreground=[('disabled', 'white')])
+            style.map('Error.TButton', background=[('active', '#ff0000')], foreground=[('disabled', 'white')])
             style.map('TCheckbutton', background=[('active', '#1c1c1c')])
             # The fix for the Treeview was found on this stack overflow article
             # https://stackoverflow.com/questions/58063067/unable-to-change-background-color-of-treeview-in-python
@@ -39,6 +43,14 @@ class ThemeChanger:
                 "Header.TButton", foreground="white", background="#1c1c1c",
                 font="Helvetica 20", padding="5 5 5 5", anchor="center"
                 )
+            style.configure(
+                "Success.TButton", foreground="black", background="#009B0F",
+                font="Helvetica 20", padding="5 5 5 5", anchor="center"
+            )
+            style.configure(
+                "Error.TButton", foreground="white", background="#FF0000",
+                font="Helvetica 20", padding="5 5 5 5", anchor="center"
+            )
             style.configure(
                 "TLabel", foreground="white", background="#1c1c1c",
                 font="Helvetica 12", anchor="center"
@@ -58,11 +70,11 @@ class ThemeChanger:
             style.configure(
                 "Error.TLabel", foreground="white", background="red",
                 font="Helvetica 24", anchor="center"
-            )
+                )
             style.configure(
                 "Success.TLabel", foreground="black", background="#00FF21",
                 font="Helvetica 24", anchor="center"
-            )
+                )
             style.configure(
                 "Treeview", foreground="white", background="#1c1c1c",
                 font="Helvetica 20", anchor="center", justify="center",
@@ -108,6 +120,8 @@ class ThemeChanger:
             window.configure(background="#F0F0F0")
             style.theme_use("default")
             style.map('TButton', background=[('active', '#E0E0E0')])
+            style.map('Success.TButton', background=[('active', '#00ff00')], foreground=[('disabled', 'black')])
+            style.map('Error.TButton', background=[('active', '#ff0000')], foreground=[('disabled', 'white')])
             style.map('TCheckbutton', background=[('active', '#F0F0F0')])
             style.map(
                 "Treeview",
@@ -122,6 +136,14 @@ class ThemeChanger:
                 "Header.TButton", foreground="black", background="#F0F0F0",
                 font="Helvetica 20", padding="5 5 5 5"
                 )
+            style.configure(
+                "Success.TButton", foreground="black", background="#00FF21",
+                font="Helvetica 20", padding="5 5 5 5"
+            )
+            style.configure(
+                "Error.TButton", foreground="white", background="#FF0000",
+                font="Helvetica 20", padding="5 5 5 5"
+            )
             style.configure(
                 "TLabel", foreground="black", background="#F0F0F0",
                 font="Helvetica 12", anchor="center"
