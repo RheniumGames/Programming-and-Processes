@@ -7,6 +7,7 @@ with open(f"{FILE_PATH}/Dependencies/user_settings.json", "r") as file:
     user_settings = json.load(file)
     file.close()
 
+
 class ThemeChanger:
 
     __slots__ = ["style", "window"]
@@ -24,10 +25,18 @@ class ThemeChanger:
             global default_text_colour
             window.configure(background="#1c1c1c")
             style.theme_use("default")
-            style.map('TButton', background=[('active', '#212121')], foreground=[('disabled', 'black')])
-            style.map('Success.TButton', background=[('active', '#00ff00')], foreground=[('disabled', 'white')])
-            style.map('Error.TButton', background=[('active', '#ff0000')], foreground=[('disabled', 'white')])
-            style.map('TCheckbutton', background=[('active', '#1c1c1c')])
+            style.map(
+                'TButton', background=[('active', '#212121')],
+                foreground=[('disabled', 'black')]
+                )
+            style.map(
+                'Success.TButton', background=[('active', '#00ff00')],
+                foreground=[('disabled', 'white')]
+                )
+            style.map(
+                'Error.TButton', background=[('active', '#ff0000')],
+                foreground=[('disabled', 'white')]
+                )
             # The fix for the Treeview was found on this stack overflow article
             # https://stackoverflow.com/questions/58063067/unable-to-change-background-color-of-treeview-in-python
             style.map(
@@ -35,6 +44,7 @@ class ThemeChanger:
                 foreground=[('disabled', '#a3a3a3'), ('selected', '#ffffff')],
                 background=[('disabled', '#d9d9d9'), ('selected', '#4a6984')]
                 )
+            style.map("TCombobox", foreground=[('disabled', '#a3a3a3')])
             style.configure(
                 "TButton", foreground="white", background="#1c1c1c",
                 font="Helvetica 12", padding="5 5 5 5"
@@ -105,6 +115,10 @@ class ThemeChanger:
                 "Vertical.Header.TScrollbar", foreground="white",
                 background="#1c1c1c", font="Helvetica 12", padding="5 0 5 0"
                 )
+            style.configure(
+                "TCombobox", foreground="black", background="#1c1c1c",
+                font="Helvetica 16", padding="5 5 5 5"
+                )
             default_background = "#1c1c1c"
             default_text_colour = "white"
             user_settings["Settings"][0]["colourScheme"] = "dark"
@@ -120,8 +134,14 @@ class ThemeChanger:
             window.configure(background="#F0F0F0")
             style.theme_use("default")
             style.map('TButton', background=[('active', '#E0E0E0')])
-            style.map('Success.TButton', background=[('active', '#00ff00')], foreground=[('disabled', 'black')])
-            style.map('Error.TButton', background=[('active', '#ff0000')], foreground=[('disabled', 'white')])
+            style.map(
+                'Success.TButton', background=[('active', '#00ff00')],
+                foreground=[('disabled', 'black')]
+                )
+            style.map(
+                'Error.TButton', background=[('active', '#ff0000')],
+                foreground=[('disabled', 'white')]
+                )
             style.map('TCheckbutton', background=[('active', '#F0F0F0')])
             style.map(
                 "Treeview",
@@ -198,6 +218,10 @@ class ThemeChanger:
                 "Vertical.Header.TScrollbar", foreground="black",
                 background="#F0F0F0", font="Helvetica 12", padding="5 5 5 5"
                 )
+            style.configure(
+                "TCombobox", foreground="black", background="#F0F0F0",
+                font="Helvetica 16", padding="5 5 5 5"
+                )
             default_background = "#F0F0F0"
             default_text_colour = "black"
             user_settings["Settings"][0]["colourScheme"] = "light"
@@ -231,6 +255,7 @@ class ThemeChanger:
             elif area == "foreground":
                 return "black"
         return ""
+
 
 if __name__ == "__main__":
     pass
