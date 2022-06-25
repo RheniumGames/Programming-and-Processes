@@ -59,6 +59,10 @@ class NoFileNameError(Exception):
     pass
 
 
+class FileLengthError(Exception):
+    pass
+
+
 class NoQuestionError(Exception):
     pass
 
@@ -161,6 +165,8 @@ def main():
             if (filename == "" or filename is None or
                     filename.lower() == "enter a file name"):
                 raise NoFileNameError
+            if len(filename) > 32:
+                raise FileLengthError
             if question == "":
                 raise NoQuestionError
             if "" in choices:
@@ -221,13 +227,18 @@ def main():
                 element, "Question added successfully!", 1.5, "Submit"
                 )
         except NoFileNameError:
-            error_button(element, "Please enter a file name", 1.5)
+            error_button(element, "Please enter a file name", 1.5, "Submit")
+        except FileLengthError:
+            error_button(
+                element, "The file name must have no more than 32 characters",
+                1.5, "Submit"
+                )
         except NoQuestionError:
-            error_button(element, "Please enter a question", 1.5)
+            error_button(element, "Please enter a question", 1.5, "Submit")
         except NoAnswerError:
-            error_button(element, "Please select an answer", 1.5)
+            error_button(element, "Please select an answer", 1.5, "Submit")
         except NoChoiceError:
-            error_button(element, "Please create four choices", 1.5)
+            error_button(element, "Please create four choices", 1.5, "Submit")
         return
 
     # -------------------------------------------------------------------------
