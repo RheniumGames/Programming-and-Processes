@@ -189,7 +189,7 @@ def main():
 
             # Loop through correct list, if there is a 1 in the list,
             # add the corresponding text in answers to correct_list_words
-            filename = filename.replace(".json", "").lower()
+            filename = filename.lower().strip().replace(".json", "")
             for i in range(len(correct_list)):
                 if correct_list[i] == "1":
                     correct_list_words.append(choices[i])

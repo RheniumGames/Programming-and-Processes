@@ -47,7 +47,7 @@ class ThemeChanger:
             style.map("TCombobox", foreground=[('disabled', '#a3a3a3')])
             style.configure(
                 "TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 12", padding="5 5 5 5"
+                font="Helvetica 12", padding="5 5 5 5", wraplength=5000
                 )
             style.configure(
                 "Header.TButton", foreground="white", background="#1c1c1c",
@@ -63,7 +63,7 @@ class ThemeChanger:
             )
             style.configure(
                 "TLabel", foreground="white", background="#1c1c1c",
-                font="Helvetica 12", anchor="center"
+                font="Helvetica 12", anchor="center", wraplength=5000
                 )
             style.configure(
                 "SubHeading.TLabel", foreground="white", background="#1c1c1c",
@@ -150,7 +150,7 @@ class ThemeChanger:
                 )
             style.configure(
                 "TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 12", padding="5 5 5 5"
+                font="Helvetica 12", padding="5 5 5 5", wraplength=5000
                 )
             style.configure(
                 "Header.TButton", foreground="black", background="#F0F0F0",
@@ -166,7 +166,7 @@ class ThemeChanger:
             )
             style.configure(
                 "TLabel", foreground="black", background="#F0F0F0",
-                font="Helvetica 12", anchor="center"
+                font="Helvetica 12", anchor="center", wraplength=5000
                 )
             style.configure(
                 "SubHeading.TLabel", foreground="black", background="#F0F0F0",
