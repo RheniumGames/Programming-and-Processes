@@ -9,6 +9,8 @@ import tkinter as tk
 import typing
 from tkinter import ttk
 from typing import List
+# Importing the search function to use Regular Expressions
+from re import search
 
 from styling import ThemeChanger
 
@@ -60,6 +62,10 @@ class NoFileNameError(Exception):
 
 
 class FileLengthError(Exception):
+    pass
+
+
+class InvalidFileName(Exception):
     pass
 
 
@@ -161,10 +167,13 @@ def main():
             )
 
     def dump_questions(question, answer, choices, filename, element):
+        invalid_char = r'\"|\<|\>|\?|\*|\/|\:|\|'
         try:
             if (filename == "" or filename is None or
                     filename.lower() == "enter a file name"):
                 raise NoFileNameError
+            if search(invalid_char, filename):
+                raise InvalidFileName
             if len(filename) > 32:
                 raise FileLengthError
             if question == "":
@@ -228,6 +237,11 @@ def main():
                 )
         except NoFileNameError:
             error_button(element, "Please enter a file name", 1.5, "Submit")
+        except InvalidFileName:
+            error_button(
+                element, r'Invalid characters in filename -> /\<>|?!:*"',
+                2.25, "Submit"
+                )
         except FileLengthError:
             error_button(
                 element, "The file name must have no more than 32 characters",
