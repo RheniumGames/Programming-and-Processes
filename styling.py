@@ -47,7 +47,12 @@ class ThemeChanger:
             style.map("TCombobox", foreground=[('disabled', '#a3a3a3')])
             style.configure(
                 "TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 12", padding="5 5 5 5", wraplength=5000
+                font="Helvetica 12", padding="5 5 5 5", wraplength=5000,
+                )
+            style.configure(
+                "Question.TButton", foreground="white", background="#1c1c1c",
+                font="Helvetica 20", padding="5 5 5 5", anchor="center",
+                borderwidth=4, bordercolor="#232323"
                 )
             style.configure(
                 "Header.TButton", foreground="white", background="#1c1c1c",
@@ -86,7 +91,7 @@ class ThemeChanger:
                 font="Helvetica 24", anchor="center"
                 )
             style.configure(
-                "Treeview", foreground="white", background="#1c1c1c",
+                "Treeview", foreground="white", background="#232323",
                 font="Helvetica 20", anchor="center", justify="center",
                 rowheight=30, fieldbackground="#1c1c1c"
                 )
@@ -104,7 +109,7 @@ class ThemeChanger:
                 font="Helvetica 12"
                 )
             style.configure(
-                "TEntry", anchor="center", fieldbackground="#1c1c1c",
+                "TEntry", anchor="center", fieldbackground="#232323",
                 foreground="white"
                 )
             style.configure(
@@ -150,7 +155,13 @@ class ThemeChanger:
                 )
             style.configure(
                 "TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 12", padding="5 5 5 5", wraplength=5000
+                font="Helvetica 12", padding="5 5 5 5", wraplength=5000,
+                anchor="center"
+                )
+            style.configure(
+                "Question.TButton", foreground="black", background="#F0F0F0",
+                font="Helvetica 20", padding="5 5 5 5", borderwidth=4,
+                bordercolor="#F7F7F7"
                 )
             style.configure(
                 "Header.TButton", foreground="black", background="#F0F0F0",
@@ -189,7 +200,7 @@ class ThemeChanger:
                 font="Helvetica 24", anchor="center"
             )
             style.configure(
-                "Treeview", foreground="black", background="#F0F0F0",
+                "Treeview", foreground="black", background="#F7F7F7",
                 font="Helvetica 20", anchor="center", justify="center",
                 rowheight=30, fieldbackground="#F0F0F0"
                 )
@@ -207,7 +218,7 @@ class ThemeChanger:
                 font="Helvetica 12"
                 )
             style.configure(
-                "TEntry", anchor="center", fieldbackground="#F4F4F4",
+                "TEntry", anchor="center", fieldbackground="#F7F7F7",
                 foreground="black"
                 )
             style.configure(
@@ -249,11 +260,19 @@ class ThemeChanger:
                 return "#1c1c1c"
             elif area == "foreground":
                 return "white"
+            elif area == "entrybg":
+                return "#232323"
+            elif area == "entrybg2":
+                return "#1E1E1E"
         elif theme == "light":
             if area == "background":
                 return "#F0F0F0"
             elif area == "foreground":
                 return "black"
+            elif area == "entrybg":
+                return "#F7F7F7"
+            elif area == "entrybg2":
+                return "#EFEFEF"
         return ""
 
 

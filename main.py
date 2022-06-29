@@ -51,7 +51,7 @@ except FileNotFoundError as error:
         user_settings = json.load(file)
         file.close()
 
-# More global variables
+# Global variables corresponding to json file information
 globalscore = user_settings["QuizData"][0]["totalScore"]
 theme = user_settings["Settings"][0]["colourScheme"]
 
@@ -95,6 +95,7 @@ def main():
 
     styling = ThemeChanger(window, style)
 
+    # A function to collect the default colours
     def collect_default(area=None, num=0) -> str:
         global default_background
         global default_text_colour
@@ -112,17 +113,27 @@ def main():
                 theme = "light"
         default_background = styling.default_colours(theme, "background")
         default_text_colour = styling.default_colours(theme, "foreground")
+        default_text_background = styling.default_colours(theme, "entrybg")
+        default_text2_background = styling.default_colours(theme, "entrybg2")
         if area is not None:
             if area == "fg":
                 return str(default_text_colour)
             elif area == "bg":
                 return str(default_background)
+            elif area == "text":
+                return str(default_text_background)
+            elif area == "text2":
+                return str(default_text2_background)
         for widget in window.winfo_children():
             if not isinstance(widget, ttk.Widget):
                 widget.configure(
                     background=default_background,
                     foreground=default_text_colour
                     )
+            if isinstance(widget, tk.Text):
+                widget.configure(
+                    background=default_text_background
+                )
         return ""
 
     def error_message(window, text, seconds) -> None:
@@ -147,30 +158,47 @@ def main():
         message.after(int(seconds * 1000), lambda: message.destroy())
         return
 
-    def error_button(button, text, seconds, aftertext) -> None:
+    def error_button(button, text, seconds, aftertext, module) -> None:
         button.config(text=text, style="Error.TButton", state="disabled")
-        button.after(
-            int(seconds * 1000),
-            lambda: button.config(
-                text=aftertext, state="normal", style="Header.TButton"
+        if module == "quiz":
+            button.after(
+                int(seconds * 1000),
+                lambda: button.config(
+                    text=aftertext, state="normal", style="Question.TButton"
+                    )
                 )
-            )
+        else:
+            button.after(
+                int(seconds * 1000),
+                lambda: button.config(
+                    text=aftertext, state="normal", style="Header.TButton"
+                    )
+                )
         return
 
-    def success_button(button, text, seconds, aftertext) -> None:
+    def success_button(button, text, seconds, aftertext, module) -> None:
         button.config(text=text, style="Success.TButton", state="disabled")
-        button.after(
-            int(seconds * 1000),
-            lambda: button.config(
-                text=aftertext, state="normal", style="Header.TButton"
-                ),
-            )
+        if module == "quiz":
+            button.after(
+                int(seconds * 1000),
+                lambda: button.config(
+                    text=aftertext, state="normal", style="Question.TButton"
+                    )
+                )
+        else:
+            button.after(
+                int(seconds * 1000),
+                lambda: button.config(
+                    text=aftertext, state="normal", style="Header.TButton"
+                    )
+                )
+        return
 
     def dump_questions(question, answer, choices, filename, element):
         invalid_char = r'\"|\<|\>|\?|\*|\/|\:|\|'
         try:
             if (filename == "" or filename is None or
-                    filename.lower() == "enter a file name"):
+                    filename.lower() == "enter a title"):
                 raise NoFileNameError
             if search(invalid_char, filename):
                 raise InvalidFileName
@@ -192,7 +220,6 @@ def main():
                         correct_list.append("0")
                 except IndexError:
                     correct_list.append("0")
-            print(correct_list)
             if '1' not in correct_list:
                 raise NoAnswerError
 
@@ -259,6 +286,34 @@ def main():
     #                               Main Menu
     # -------------------------------------------------------------------------
     def main_menu():
+        def theme_text(element=None, num=0):
+            with open(
+                f"{FILE_PATH}/Dependencies/user_settings.json", "r"
+                    ) as file:
+                user_settings = json.load(file)
+                file.close()
+            theme = user_settings["Settings"][0]["colourScheme"]
+            if num == 1:
+                if theme == "dark":
+                    theme = "light"
+                elif theme == "light":
+                    theme = "dark"
+            if theme == "dark":
+                if element is None:
+                    return "Light Mode"
+                else:
+                    element.configure(
+                        text="Light Mode"
+                    )
+                    return ""
+            else:
+                if element is None:
+                    return "Dark Mode"
+                else:
+                    element.configure(
+                        text="Dark Mode"
+                    )
+                    return ""
         window.columnconfigure([0, 1], weight=0)
         window.columnconfigure([0], weight=1, uniform="group2")
         window.rowconfigure([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], weight=0)
@@ -281,14 +336,17 @@ def main():
             )
         question_maker_button.grid(row=1, column=0)
         theme_change_button = ttk.Button(
-            window, text="Change Theme",
+            window, text=theme_text(None, 0),
             command=lambda: styling.change_theme(window.cget("bg"), False),
             style="Header.TButton"
             )
         theme_change_button.grid(row=2, column=0)
         theme_change_button.bind(
             "<Button-1>",
-            lambda event: collect_default(None, 1)
+            lambda event: [
+                collect_default(None, 1),
+                theme_text(theme_change_button, 1)
+            ]
             )
         scorelabel = ttk.Label(
             window,
@@ -311,19 +369,18 @@ def main():
         window.rowconfigure([2, 4, 7], weight=1)
         for i in window.grid_slaves():
             i.grid_forget()
-        file_name = ttk.Entry(
+        title = ttk.Entry(
             window, style="TEntry", justify="center",
             font="Helvetica 16", width=32
             )
-        file_name.insert(0, "Enter a file name")
-        print(file_name.get())
+        title.insert(0, "Enter a title")
 
         def edit_filename(text, overwrite=False):
-            if text == "Enter a file name":
-                file_name.delete(0, "end")
+            if text == "Enter a title":
+                title.delete(0, "end")
             elif overwrite is True:
-                file_name.delete(0, "end")
-                file_name.insert(0, text)
+                title.delete(0, "end")
+                title.insert(0, text)
             else:
                 pass
 
@@ -338,13 +395,13 @@ def main():
                         )
             return
 
-        file_name.bind(
+        title.bind(
             "<Button-1>",
-            lambda event: edit_filename(file_name.get())
+            lambda event: edit_filename(title.get())
             )
-        file_name.grid(row=0, column=0, columnspan=2)
-        file_name.bind(
-            "<FocusOut>", lambda event: remove_extra(file_name, 32, submit)
+        title.grid(row=0, column=0, columnspan=2)
+        title.bind(
+            "<FocusOut>", lambda event: remove_extra(title, 32, submit)
         )
         # A drop down menu that lets the user choose existing files
         # to load questions from
@@ -384,7 +441,7 @@ def main():
             )
         user_question = tk.Text(
             window, font="Helvetica 16", wrap="word",
-            bg=collect_default("bg"), fg=collect_default("fg")
+            bg=collect_default("text"), fg=collect_default("fg")
             )
         user_question.grid(
             row=2, column=0, columnspan=2, sticky="nsew", padx=5, pady=5
@@ -394,8 +451,8 @@ def main():
             )
         header_1.grid(row=3, column=0, sticky="ew", padx=2, pady=2)
         answer_1 = tk.Text(
-            window, font="Helvetica 16", wrap="word", bg=collect_default("bg"),
-            fg=collect_default("fg")
+            window, font="Helvetica 16", wrap="word",
+            bg=collect_default("text"), fg=collect_default("fg")
             )
         answer_1.grid(row=4, column=0, sticky="nsew", padx=5, pady=5)
         correctmarker_1 = ttk.Checkbutton(
@@ -409,8 +466,8 @@ def main():
             )
         header_1.grid(row=3, column=1, sticky="ew", padx=2, pady=2)
         answer_2 = tk.Text(
-            window, font="Helvetica 16", wrap="word", bg=collect_default("bg"),
-            fg=collect_default("fg")
+            window, font="Helvetica 16", wrap="word",
+            bg=collect_default("text"), fg=collect_default("fg")
             )
         answer_2.grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
         correctmarker_2 = ttk.Checkbutton(
@@ -424,8 +481,8 @@ def main():
             )
         header_3.grid(row=6, column=0, sticky="ew", padx=2, pady=2)
         answer_3 = tk.Text(
-            window, font="Helvetica 16", wrap="word", bg=collect_default("bg"),
-            fg=collect_default("fg")
+            window, font="Helvetica 16", wrap="word",
+            bg=collect_default("text"), fg=collect_default("fg")
             )
         answer_3.grid(row=7, column=0, sticky="nsew", padx=5, pady=5)
         correctmarker_3 = ttk.Checkbutton(
@@ -439,8 +496,8 @@ def main():
             )
         header_4.grid(row=6, column=1, sticky="ew", padx=2, pady=2)
         answer_4 = tk.Text(
-            window, font="Helvetica 16", wrap="word", bg=collect_default("bg"),
-            fg=collect_default("fg")
+            window, font="Helvetica 16", wrap="word",
+            bg=collect_default("text"), fg=collect_default("fg")
             )
         answer_4.grid(row=7, column=1, sticky="nsew", padx=5, pady=5)
         correctmarker_4 = ttk.Checkbutton(
@@ -470,7 +527,7 @@ def main():
                     answer_3.get("1.0", "end-1c"),
                     answer_4.get("1.0", "end-1c")
                 ],
-                file_name.get(),
+                title.get(),
                 submit
             )
             )
@@ -522,7 +579,8 @@ def main():
             file_list[i] = file_list[i].replace(".json", "").title()
         file_list.sort()
         header = ttk.Label(
-            window, text="Select a file to import questions from:",
+            window, text="Double click any entry below to load "
+            "the corresponding quiz:",
             style="Header.TLabel"
             )
         header.grid(
@@ -543,7 +601,9 @@ def main():
         scrollbar.grid(
             row=1,
             column=1,
-            sticky="ns"
+            sticky="ns",
+            padx=(0, 10),
+            pady=10
             )
         treeview = ttk.Treeview(
             window,
@@ -557,14 +617,28 @@ def main():
         treeview.grid(
             row=1,
             column=0,
-            sticky="nsew"
+            sticky="nsew",
+            padx=(10, 0),
+            pady=10
             )
+        treeview.tag_configure("odd", background=collect_default("text"))
+        treeview.tag_configure("even", background=collect_default("text2"))
         # https://stackoverflow.com/questions/8688839/remove-empty-first-column-of-a-treeview-object
         treeview.column("#0", width=0, stretch="no")
         treeview.column(column=0, anchor="center")
+        num = 0
         for i in file_list:
             word = [i]
-            treeview.insert("", "end", text=str(i), values=(word))
+            if num % 2 == 0:
+                treeview.insert(
+                    "", "end", text=str(i), values=(word), tags=("odd")
+                    )
+                num += 1
+            elif num % 2 != 0:
+                treeview.insert(
+                    "", "end", text=str(i), values=(word), tags=("even")
+                    )
+                num += 1
         treeview.bind("<Double-1>", lambda event: file_loader(
             treeview.item(treeview.selection())["values"][0]
             ))
@@ -584,7 +658,9 @@ def main():
         window.rowconfigure([1, 2, 3], weight=1)
 
         # A function that changes the question.
-        def new_question():
+        def new_question(clear):
+            if clear is True:
+                answers[:1] = []
             try:
                 # Clear the possible current_choices
                 current_choices = []
@@ -616,17 +692,39 @@ def main():
                     globalscore += 1
                     score_display.configure(text=f"Score: {str(score)}")
                     success_button(
-                        button, button.cget("text"), 0.5, button.cget("text")
+                        button, button.cget("text"), 0.5, button.cget("text"),
+                        "quiz"
                         )
                     # Call the next question after a delay
                     answers[:1] = []
-                    window.after(int(0.5*1000), lambda: new_question())
+                    window.after(int(0.5*1000), lambda: new_question(False))
                 else:
                     error_button(
-                        button, button.cget("text"), 0.5, button.cget("text")
+                        button, button.cget("text"), 1, button.cget("text"),
+                        "quiz"
                         )
+                    if answer1.cget("text") == answers[0]:
+                        success_button(
+                            answer1, answer1.cget("text"), 1,
+                            answer1.cget("text"), "quiz"
+                            )
+                    elif answer2.cget("text") == answers[0]:
+                        success_button(
+                            answer2, answer2.cget("text"), 1,
+                            answer2.cget("text"), "quiz"
+                            )
+                    elif answer3.cget("text") == answers[0]:
+                        success_button(
+                            answer3, answer3.cget("text"), 1,
+                            answer3.cget("text"), "quiz"
+                            )
+                    elif answer4.cget("text") == answers[0]:
+                        success_button(
+                            answer4, answer4.cget("text"), 1,
+                            answer4.cget("text"), "quiz"
+                            )
                     answers[:1] = []
-                    window.after(int(0.5*1000), lambda: new_question())
+                    window.after(int(1*1000), lambda: new_question(False))
                 return score
             except IndexError:
                 return 0
@@ -665,58 +763,66 @@ def main():
         answer1 = ttk.Button(
             window,
             text="Answer 1",
-            style="Header.TButton",
+            style="Question.TButton",
             command=lambda: check_answer(answer1.cget("text"), answer1)
             )
         answer1.grid(
             row=row_number+1,
             column=0,
-            sticky="nsew"
+            sticky="nsew",
+            padx=(10, 5),
+            pady=(10, 5)
             )
 
         answer2 = ttk.Button(
             window,
             text="Answer 2",
-            style="Header.TButton",
+            style="Question.TButton",
             command=lambda: check_answer(answer2.cget("text"), answer2)
             )
         answer2.grid(
             row=row_number+1,
             column=1,
-            sticky="nsew"
+            sticky="nsew",
+            padx=(5, 10),
+            pady=(10, 5)
             )
 
         answer3 = ttk.Button(
             window,
             text="Answer 3",
-            style="Header.TButton",
+            style="Question.TButton",
             command=lambda: check_answer(answer3.cget("text"), answer3)
             )
         answer3.grid(
             row=row_number+2,
             column=0,
-            sticky="nsew"
+            sticky="nsew",
+            padx=(10, 5),
+            pady=(5, 10)
             )
 
         answer4 = ttk.Button(
             window,
             text="Answer 4",
-            style="Header.TButton",
+            style="Question.TButton",
             command=lambda: check_answer(answer4.cget("text"), answer4)
             )
         answer4.grid(
             row=row_number+2,
             column=1,
-            sticky="nsew"
+            sticky="nsew",
+            padx=(5, 10),
+            pady=(5, 10)
             )
 
-        new_question()
+        new_question(False)
 
         skip_button = ttk.Button(
             window,
             text="Skip",
             style="Header.TButton",
-            command=lambda: new_question()
+            command=lambda: new_question(True)
             )
         skip_button.grid(
             row=row_number+3,
