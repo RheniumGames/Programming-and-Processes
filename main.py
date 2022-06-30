@@ -158,7 +158,7 @@ def main():
         message.after(int(seconds * 1000), lambda: message.destroy())
         return
 
-    def error_button(button, text, seconds, aftertext, module) -> None:
+    def error_button(button, text, seconds, aftertext, module=None) -> None:
         button.config(text=text, style="Error.TButton", state="disabled")
         if module == "quiz":
             button.after(
@@ -176,7 +176,7 @@ def main():
                 )
         return
 
-    def success_button(button, text, seconds, aftertext, module) -> None:
+    def success_button(button, text, seconds, aftertext, module=None) -> None:
         button.config(text=text, style="Success.TButton", state="disabled")
         if module == "quiz":
             button.after(
@@ -536,7 +536,7 @@ def main():
             )
         window.bind("<Escape>", lambda event: main_menu())
 
-    def file_loader(file_name):
+    def file_loader(file_name, noback=False):
         # Loads the file supplied by the user
         global questions
         global choices
@@ -560,7 +560,7 @@ def main():
             if 'answer' in item:
                 answers.append(item['answer'])
 
-        quiz()
+        quiz(noback)
 
     def list_chooser():
         # This function will bring up a GUI that will allow users to choose
@@ -578,6 +578,9 @@ def main():
         for i in range(len(file_list)):
             file_list[i] = file_list[i].replace(".json", "").title()
         file_list.sort()
+        if len(file_list) == 1:
+            file_loader(file_list[0], True)
+            return
         header = ttk.Label(
             window, text="Double click any entry below to load "
             "the corresponding quiz:",
@@ -648,7 +651,7 @@ def main():
     # -------------------------------------------------------------------------
     #                           The Quiz Function
     # -------------------------------------------------------------------------
-    def quiz():
+    def quiz(noback):
 
         for i in window.grid_slaves():
             i.grid_forget()
@@ -739,10 +742,16 @@ def main():
             sticky="nsew",
             pady=5
             )
-        back = ttk.Button(
-            window, text="Back", command=lambda: list_chooser(),
-            style="Header.TButton"
-            )
+        if noback is False:
+            back = ttk.Button(
+                window, text="Back", command=lambda: list_chooser(),
+                style="Header.TButton"
+                )
+        elif noback is True:
+            back = ttk.Button(
+                window, text="Back", command=lambda: main_menu(),
+                style="Header.TButton"
+                )
         back.grid(
             row=0,
             column=0,
@@ -830,7 +839,10 @@ def main():
             columnspan=2,
             sticky="nsew"
             )
-        window.bind("<Escape>", lambda event: list_chooser())
+        if noback is False:
+            window.bind("<Escape>", lambda event: list_chooser())
+        elif noback is True:
+            window.bind("<Escape>", lambda event: main_menu())
 
     styling.change_theme(None, True)
 

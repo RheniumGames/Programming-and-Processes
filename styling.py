@@ -33,6 +33,7 @@ class ThemeChanger:
                 'Success.TButton', background=[('active', '#00ff00')],
                 foreground=[('disabled', 'white')]
                 )
+            style.map('TCheckbutton', background=[('active', '#232323')])
             style.map(
                 'Error.TButton', background=[('active', '#ff0000')],
                 foreground=[('disabled', 'white')]
@@ -147,7 +148,7 @@ class ThemeChanger:
                 'Error.TButton', background=[('active', '#ff0000')],
                 foreground=[('disabled', 'white')]
                 )
-            style.map('TCheckbutton', background=[('active', '#F0F0F0')])
+            style.map('TCheckbutton', background=[('active', '#E0E0E0')])
             style.map(
                 "Treeview",
                 foreground=[('disabled', '#a3a3a3'), ('selected', '#ffffff')],
