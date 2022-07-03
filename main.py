@@ -271,7 +271,7 @@ def main():
                 )
         except FileLengthError:
             error_button(
-                element, "The file name must have no more than 32 characters",
+                element, "The title must have no more than 32 characters",
                 1.5, "Submit"
                 )
         except NoQuestionError:
@@ -680,10 +680,18 @@ def main():
                 answer4.configure(text=current_choices[3])
             except IndexError:
                 question.configure(text="The quiz is over!")
+                question.grid(
+                    row=row_number, column=0, columnspan=2, sticky="nesw",
+                    pady=(150,0)
+                )
                 for i in window.grid_slaves():
                     if i.grid_info()["row"] != 0 and i.grid_info()["row"] != 1:
                         i.grid_forget()
-                window.rowconfigure([2, 3], weight=0)
+                # window.rowconfigure([2, 3], weight=0)
+                back.grid(
+                    row=row_number+1, column=0, columnspan=2, sticky="new",
+                    padx=300
+                )
 
         # A function that will check if the user's answer is correct
         def check_answer(answer, button) -> int:
@@ -732,6 +740,7 @@ def main():
             except IndexError:
                 return 0
 
+        # Setting up widgets for the quiz
         score_display = ttk.Label(
             window, text=f"Score: {str(score)}", style="Header.TLabel"
             )
@@ -839,6 +848,8 @@ def main():
             columnspan=2,
             sticky="nsew"
             )
+        # If the user only has one quiz, it will go to main menu
+        # Instead of going to select another quiz
         if noback is False:
             window.bind("<Escape>", lambda event: list_chooser())
         elif noback is True:
