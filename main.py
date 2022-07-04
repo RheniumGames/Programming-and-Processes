@@ -327,7 +327,7 @@ def main():
         title.grid(row=0, column=0, columnspan=2)
         start_button = ttk.Button(
             window, text="Start", command=lambda: list_chooser(),
-            style="Header.TButton"
+            style="Green.TButton"
             )
         start_button.grid(row=1, column=0, sticky="n")
         question_maker_button = ttk.Button(
@@ -740,6 +740,59 @@ def main():
             except IndexError:
                 return 0
 
+        # A function that can assist the user if they need help with something
+        def helpcmd():
+            helpbtn.configure(state="disabled")
+            helpframe = tk.Frame(
+                window, background=collect_default("bg")
+            )
+            helpframe.place(
+                relheight=0.8,
+                relwidth=0.8,
+                relx=0.5,
+                rely=0.5,
+                anchor="center"
+            )
+            helpframe.columnconfigure([0, 1], weight=1, uniform="group1")
+            helpframe.rowconfigure([0], weight=0)
+            helpframe.rowconfigure([1, 3], weight=1)
+            quitbtn = ttk.Button(
+                helpframe, text="X", style="Header.TButton",
+                command=lambda: [helpframe.destroy(), helpbtn.configure(state="enabled")]
+            )
+            quitbtn.grid(row=0, column=1, sticky="e")
+            helpq1 = ttk.Label(
+                helpframe, style="Bold.TLabel",
+                text="How do I answer a question?"
+            )
+            helpq1.grid(row=1, column=0, columnspan=2, sticky="nsew", pady=3)
+            helpa1 = ttk.Label(
+                helpframe, style="Header.TLabel",
+                text="Four buttons are displayed beneath the question,\n"
+                "click the one that contains the answer to the question and\n"
+                "it will automatically be submitted.", justify="center"
+            )
+            helpa1.grid(row=2, column=0, columnspan=2, sticky="nsew", pady=3)
+            helpq2 = ttk.Label(
+                helpframe, style="Bold.TLabel",
+                text="How do I answer a question?"
+            )
+            helpq2.grid(row=3, column=0, columnspan=2, sticky="nsew", pady=3)
+            helpa2 = ttk.Label(
+                helpframe, style="Header.TLabel",
+                text="Four buttons are displayed beneath the question,\n"
+                "click the one that contains the answer to the question and\n"
+                "it will automatically be submitted.", justify="center"
+            )
+            helpa2.grid(row=4, column=0, columnspan=2, sticky="nsew", pady=3)
+            scrollbar = ttk.Scrollbar(
+                helpframe, orient="vertical"
+            )
+            scrollbar.grid(
+                row=1, column=1, rowspan=4, sticky="nse", padx=(0, 10), pady=10
+            )
+            scrollbar.config(command=helpframe.yview)
+            return
         # Setting up widgets for the quiz
         score_display = ttk.Label(
             window, text=f"Score: {str(score)}", style="Header.TLabel"
@@ -766,6 +819,11 @@ def main():
             column=0,
             sticky="w"
             )
+        helpbtn = ttk.Button(
+            window, text="Help", command=lambda: helpcmd(),
+            style="Header.TButton"
+        )
+        helpbtn.grid(row=0, column=1, sticky="e")
         question = ttk.Label(
             window,
             text="Question",
@@ -839,14 +897,16 @@ def main():
         skip_button = ttk.Button(
             window,
             text="Skip",
-            style="Header.TButton",
+            style="Red.TButton",
             command=lambda: new_question(True)
             )
         skip_button.grid(
             row=row_number+3,
             column=0,
             columnspan=2,
-            sticky="nsew"
+            sticky="nsew",
+            padx=10,
+            pady=(0, 10)
             )
         # If the user only has one quiz, it will go to main menu
         # Instead of going to select another quiz

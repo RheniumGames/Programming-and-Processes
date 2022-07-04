@@ -29,6 +29,8 @@ class ThemeChanger:
                 'TButton', background=[('active', '#212121')],
                 foreground=[('disabled', 'black')]
                 )
+            style.map("Green.TButton", background=[('active', '#009109')])
+            style.map("Red.TButton", background=[("active", "#CC0000")])
             style.map(
                 'Success.TButton', background=[('active', '#00ff00')],
                 foreground=[('disabled', 'white')]
@@ -47,25 +49,24 @@ class ThemeChanger:
                 )
             style.map("TCombobox", foreground=[('disabled', '#a3a3a3')])
             style.configure(
-                "TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 12", padding="5 5 5 5", wraplength=5000,
+                "TButton", foreground="white", background="#1E1E1E",
+                font="Helvetica 20", padding="5 5 5 5", wraplength=5000,
+                anchor="center", relief="groove", borderwidth=2,
+                bordercolor="black"
+                )
+            style.configure("Green.TButton", background="#008C0B")
+            style.configure("Red.TButton", background="#C60000")
+            style.configure(
+                "Question.TButton", foreground="white"
                 )
             style.configure(
-                "Question.TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 20", padding="5 5 5 5", anchor="center",
-                borderwidth=4, bordercolor="#232323"
-                )
-            style.configure(
-                "Header.TButton", foreground="white", background="#1c1c1c",
-                font="Helvetica 20", padding="5 5 5 5", anchor="center"
+                "Header.TButton", foreground="white"
                 )
             style.configure(
                 "Success.TButton", foreground="black", background="#009B0F",
-                font="Helvetica 20", padding="5 5 5 5", anchor="center"
             )
             style.configure(
                 "Error.TButton", foreground="white", background="#FF0000",
-                font="Helvetica 20", padding="5 5 5 5", anchor="center"
             )
             style.configure(
                 "TLabel", foreground="white", background="#1c1c1c",
@@ -78,6 +79,10 @@ class ThemeChanger:
             style.configure(
                 "Header.TLabel", foreground="white", background="#1c1c1c",
                 font="Helvetica 20", anchor="center"
+                )
+            style.configure(
+                "Bold.TLabel", foreground="white", background="#1c1c1c",
+                font=("Helvetica", 20, "bold"), anchor="center"
                 )
             style.configure(
                 "Title.TLabel", foreground="white", background="#1c1c1c",
@@ -140,6 +145,8 @@ class ThemeChanger:
             window.configure(background="#F0F0F0")
             style.theme_use("default")
             style.map('TButton', background=[('active', '#E0E0E0')])
+            style.map('Green.TButton', background=[('active', '#8BF996')])
+            style.map("Red.TButton", background=[("active", "#FF6060")])
             style.map(
                 'Success.TButton', background=[('active', '#00ff00')],
                 foreground=[('disabled', 'black')]
@@ -155,26 +162,24 @@ class ThemeChanger:
                 background=[('disabled', '#d9d9d9'), ('selected', '#4a6984')]
                 )
             style.configure(
-                "TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 12", padding="5 5 5 5", wraplength=5000,
-                anchor="center"
+                "TButton", foreground="black", background="#EAEAEA",
+                font="Helvetica 20", padding="5 5 5 5", wraplength=5000,
+                anchor="center", relief="groove", borderwidth=2,
+                bordercolor="black"
+                )
+            style.configure("Green.TButton", background="#8EFF9B")
+            style.configure("Red.TButton", background="#FF6868")
+            style.configure(
+                "Question.TButton", foreground="black"
                 )
             style.configure(
-                "Question.TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 20", padding="5 5 5 5", borderwidth=4,
-                bordercolor="#F7F7F7"
-                )
-            style.configure(
-                "Header.TButton", foreground="black", background="#F0F0F0",
-                font="Helvetica 20", padding="5 5 5 5"
+                "Header.TButton", foreground="black"
                 )
             style.configure(
                 "Success.TButton", foreground="black", background="#00FF21",
-                font="Helvetica 20", padding="5 5 5 5"
             )
             style.configure(
                 "Error.TButton", foreground="white", background="#FF0000",
-                font="Helvetica 20", padding="5 5 5 5"
             )
             style.configure(
                 "TLabel", foreground="black", background="#F0F0F0",
@@ -187,6 +192,10 @@ class ThemeChanger:
             style.configure(
                 "Header.TLabel", foreground="black", background="#F0F0F0",
                 font="Helvetica 20", anchor="center"
+                )
+            style.configure(
+                "Bold.TLabel", foreground="black", background="#F0F0F0",
+                font=("Helvetica", 20, "bold"), anchor="center"
                 )
             style.configure(
                 "Title.TLabel", foreground="black", background="#F0F0F0",
