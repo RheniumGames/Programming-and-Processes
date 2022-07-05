@@ -263,7 +263,7 @@ def main():
                 element, "Question added successfully!", 1.5, "Submit"
                 )
         except NoFileNameError:
-            error_button(element, "Please enter a file name", 1.5, "Submit")
+            error_button(element, "Please enter a title", 1.5, "Submit")
         except InvalidFileName:
             error_button(
                 element, r'Invalid characters in filename -> /\<>|?!:*"',
@@ -462,7 +462,7 @@ def main():
                 if button is not None:
                     error_button(
                         button,
-                        "The file name must have no more than "
+                        "The title must have no more than "
                         f"{limit} characters", 5, "Submit"
                         )
             return

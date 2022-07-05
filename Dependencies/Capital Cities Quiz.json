@@ -21,16 +21,6 @@
             "answer": "Stockholm"
         },
         {
-            "question": "What PEP is the style guide for Python?",
-            "options": [
-                "PEP 8",
-                "PEP 20",
-                "PEP 232",
-                "PEP 257"
-            ],
-            "answer": "PEP 8"
-        },
-        {
             "question": "What is the capital of France?",
             "options": [
                 "Paris",
@@ -39,6 +29,26 @@
                 "Strasbourg"
             ],
             "answer": "Paris"
+        },
+        {
+            "question": "What is the capital of New Zealand?",
+            "options": [
+                "Auckland",
+                "Wellington",
+                "Christchurch",
+                "Dunedin"
+            ],
+            "answer": "Wellington"
+        },
+        {
+            "question": "What is the capital of Australia?",
+            "options": [
+                "Canberra",
+                "Perth",
+                "Sydney",
+                "Brisbane"
+            ],
+            "answer": "Canberra"
         }
     ]
 }
