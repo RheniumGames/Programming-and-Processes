@@ -83,6 +83,7 @@ class NoChoiceError(Exception):
 
 # Define the main function
 def main():
+    # Set up the window settings
     global theme
     row_number = 1
     window = tk.Tk()
@@ -91,6 +92,7 @@ def main():
     HEIGHT = 720
     window.geometry(f"{WIDTH}x{HEIGHT}")
     window.resizable(False, False)
+    # Set the styling for the widgets
     style = ttk.Style()
 
     styling = ThemeChanger(window, style)
@@ -115,6 +117,7 @@ def main():
         default_text_colour = styling.default_colours(theme, "foreground")
         default_text_background = styling.default_colours(theme, "entrybg")
         default_text2_background = styling.default_colours(theme, "entrybg2")
+        # Return the colour for the area being queried
         if area is not None:
             if area == "fg":
                 return str(default_text_colour)
@@ -124,6 +127,7 @@ def main():
                 return str(default_text_background)
             elif area == "text2":
                 return str(default_text2_background)
+        # Changes style of all non ttk widgets
         for widget in window.winfo_children():
             if not isinstance(widget, ttk.Widget):
                 widget.configure(
@@ -136,6 +140,7 @@ def main():
                 )
         return ""
 
+    # A box that will display an assigned error message
     def error_message(window, text, seconds) -> None:
         message = ttk.Label(window, text=text, style="Error.TLabel")
         message.place(
@@ -147,6 +152,7 @@ def main():
         message.after(int(seconds * 1000), lambda: message.destroy())
         return
 
+    # A box that will display an assigned success message
     def success_message(window, text, seconds) -> None:
         message = ttk.Label(window, text=text, style="Success.TLabel")
         message.place(
@@ -158,6 +164,7 @@ def main():
         message.after(int(seconds * 1000), lambda: message.destroy())
         return
 
+    # A button that will change colour to tell the user an error
     def error_button(button, text, seconds, aftertext, module=None) -> None:
         button.config(text=text, style="Error.TButton", state="disabled")
         if module == "quiz":
@@ -176,6 +183,7 @@ def main():
                 )
         return
 
+    # A button that will change colour to green to show success
     def success_button(button, text, seconds, aftertext, module=None) -> None:
         button.config(text=text, style="Success.TButton", state="disabled")
         if module == "quiz":
@@ -195,6 +203,8 @@ def main():
         return
 
     def dump_questions(question, answer, choices, filename, element):
+        # A string that contains disallowed characters on some
+        # # operating systems
         invalid_char = r'\"|\<|\>|\?|\*|\/|\:|\|'
         try:
             if (filename == "" or filename is None or
@@ -262,6 +272,7 @@ def main():
             success_button(
                 element, "Question added successfully!", 1.5, "Submit"
                 )
+        # Catches errors that are made and reports it to the user
         except NoFileNameError:
             error_button(element, "Please enter a title", 1.5, "Submit")
         except InvalidFileName:
@@ -283,11 +294,17 @@ def main():
         return
 
     # A function that can assist the user if they need help with something
-    def helpcmd(helpbtn, back=True):
-        helpbtn.configure(state="disabled")
+    def helpcmd(helpbtn, back=True, destroy=False):
+        if helpbtn is not None:
+            helpbtn.configure(state="disabled")
         helpframe = tk.Frame(
             window, background=collect_default("bg")
         )
+        if destroy is True:
+            for widget in window.winfo_children():
+                if isinstance(widget, tk.Frame):
+                    widget.destroy()
+            return
         helpframe.place(
             relheight=0.8,
             relwidth=0.8,
@@ -298,6 +315,7 @@ def main():
         helpframe.columnconfigure([0, 1], weight=1, uniform="group1")
         helpframe.rowconfigure([0], weight=0)
         helpframe.rowconfigure([1, 3], weight=1)
+        # Messages for the help menu
         helpq1 = ttk.Label(
             helpframe, style="Bold.TLabel",
             text="How do I answer a question?"
@@ -334,10 +352,10 @@ def main():
             "After this, simply click the submit button.", justify="center"
         )
         helpa2.grid(row=3, column=0, columnspan=2, sticky="nsew", pady=3)
+        # Changing keybinds depending on which menu the user needs to go to.
         if back is True:
             window.bind(
                 "<Escape>", lambda event: [
-                    helpframe.destroy(),
                     helpframe.destroy(),
                     helpbtn.configure(state="enabled"),
                     window.bind("<Escape>", lambda event: main_menu())
@@ -346,7 +364,6 @@ def main():
         elif back is False:
             window.bind(
                 "<Escape>", lambda event: [
-                    helpframe.destroy(),
                     helpframe.destroy(),
                     helpbtn.configure(state="enabled"),
                     window.bind("<Escape>", lambda event: list_chooser())
@@ -358,6 +375,9 @@ def main():
     #                               Main Menu
     # -------------------------------------------------------------------------
     def main_menu():
+        helpcmd(None, destroy=True)
+
+        # A function to deal with different user themes.
         def theme_text(element=None, num=0):
             with open(
                 f"{FILE_PATH}/Dependencies/user_settings.json", "r"
@@ -386,6 +406,7 @@ def main():
                         text="Dark Mode"
                     )
                     return ""
+
         window.columnconfigure([0, 1], weight=0)
         window.columnconfigure([0], weight=1, uniform="group2")
         window.rowconfigure([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], weight=0)
@@ -566,6 +587,7 @@ def main():
         correctmarker_4.grid(
             row=8, column=1, sticky="sew", padx=2, pady=2
             )
+        # Makes the buttons start unchecked
         correctmarker_1.state(["!alternate"])
         correctmarker_2.state(["!alternate"])
         correctmarker_3.state(["!alternate"])
@@ -623,6 +645,7 @@ def main():
         quiz(noback)
 
     def list_chooser():
+        helpcmd(None, destroy=True)
         # This function will bring up a GUI that will allow users to choose
         # which file to import questions from
         window.columnconfigure([0, 1], weight=0)
@@ -684,12 +707,14 @@ def main():
             padx=(10, 0),
             pady=10
             )
+        # Setting different background colours for odd and even numbered files
         treeview.tag_configure("odd", background=collect_default("text"))
         treeview.tag_configure("even", background=collect_default("text2"))
         # https://stackoverflow.com/questions/8688839/remove-empty-first-column-of-a-treeview-object
         treeview.column("#0", width=0, stretch="no")
         treeview.column(column=0, anchor="center")
         num = 0
+        # A loop to add the files to the treeview
         for i in file_list:
             word = [i]
             if num % 2 == 0:
@@ -703,8 +728,9 @@ def main():
                     )
                 num += 1
         treeview.bind("<Double-1>", lambda event: file_loader(
-            treeview.item(treeview.selection())["values"][0]
-            ))
+                treeview.item(treeview.selection())["values"][0]
+            )
+        )
         scrollbar.config(command=treeview.yview)
         window.bind("<Escape>", lambda event: main_menu())
 
@@ -811,6 +837,8 @@ def main():
             sticky="nsew",
             pady=5
             )
+        # Changes the functionality of the back button depending on the
+        # number of quizzes in the folder
         if noback is False:
             back = ttk.Button(
                 window, text="Back", command=lambda: list_chooser(),
@@ -953,5 +981,6 @@ def main():
     window.mainloop()
 
 
+# Checks if this file is the one being executed, if so, the function will run
 if __name__ == "__main__":
     main()
