@@ -264,6 +264,7 @@ class ThemeChanger:
         elif user_settings["Settings"][0]["colourScheme"] == "light":
             lightmode(self, self.window, self.style)
 
+    # A function to return the default colours for tk widgets
     def default_colours(self, theme, area) -> str:
         if theme == "dark":
             if area == "background":
